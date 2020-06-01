@@ -47,7 +47,7 @@ namespace Ex03.GarageLogic
                 }
             }
 
-            public void AddAirToWheel(int i_AmountOfAirToAdd)
+            public void AddAirToWheel(float i_AmountOfAirToAdd)
             {
                 if(m_CurrentAirPressure < m_MaximumAirPressure)
                 {
