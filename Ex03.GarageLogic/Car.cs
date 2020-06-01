@@ -24,6 +24,7 @@ namespace Ex03.GarageLogic
 
         private eCarColor m_CarColor;
         private eDoorsAmount m_DoorsAmount;
+        private object m_EnergySource;
 
         public Car(eCarColor i_CarColor, eDoorsAmount i_DoorsAmount)
         {
