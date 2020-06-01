@@ -1,11 +1,18 @@
 ﻿namespace Ex03.GarageLogic
 {
-    abstract class EnergySourceUnit
+    abstract class Engine
     {
+        public enum eEngineType
+        {
+            Electric,
+            Fuel,
+        }
+
+        protected eEngineType m_EngineType;
         protected float m_RemainingEnergySource;
         protected float m_MaximumEnergySourceCapacity;
 
-        public EnergySourceUnit(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
+        public Engine(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
         {
             m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
             m_RemainingEnergySource = i_RemainingEnergySource;
@@ -21,7 +28,7 @@
             {
                 if(value > m_MaximumEnergySourceCapacity)
                 {
-                    throw new ValueOutOfRangeException("Quantity over maximum level");
+                    throw new ValueOutOfRangeException("Quantity over maximum level");  ///EXCEPTION to continue///
                 }
             }
         }
@@ -34,5 +41,12 @@
             }
         }
 
+        public eEngineType EngineType
+        {
+            get
+            {
+                return m_EngineType;
+            }
+        }
     }
 }

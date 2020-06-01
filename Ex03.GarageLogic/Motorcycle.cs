@@ -17,7 +17,7 @@ namespace Ex03.GarageLogic
         private eBikeLicenseType m_LicenseType;
         private int m_EngineCapacity;
 
-        public Motorcycle(eBikeLicenseType i_LicenseType, int i_EngineCapacity)
+        public Motorcycle(eBikeLicenseType i_LicenseType, int i_EngineCapacity) : base()  ///Fix ctor with base class
         {
             m_LicenseType = i_LicenseType;
             m_EngineCapacity = i_EngineCapacity;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class FuelEngine : EnergySourceUnit
+    class FuelEngine : Engine
     {
         public enum eFuelType
         {
@@ -14,11 +14,27 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
-        private eFuelType m_EngineType;
+        private eFuelType m_FuelType;
 
-        public void Charge(float i_LitersToAdd, eFuelType i_FuelType)
+        public FuelEngine(eFuelType i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity) 
+            : base(i_RemainingEnergySource, i_MaximumEnergySourceCapacity)
         {
-            if(this.isSameTypeOfFuel(i_FuelType) == true && i_LitersToAdd < m_MaximumEnergySourceCapacity)
+            m_FuelType = i_FuelType;
+            m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
+            m_RemainingEnergySource = i_RemainingEnergySource;
+        }
+
+        public void Refuel(float i_LitersToAdd, eFuelType i_FuelType)
+        {
+            if(i_LitersToAdd + m_RemainingEnergySource > m_MaximumEnergySourceCapacity)
+            {
+                throw new ValueOutOfRangeException();       // Too much fuel //EXCEPTION to continue///
+            }
+            else if(this.isSameTypeOfFuel(i_FuelType) == false)
+            {
+                throw new ArgumentException();              // Wrong type of fuel //EXCEPTION to continue///
+            }
+            else
             {
                 m_RemainingEnergySource = m_RemainingEnergySource + i_LitersToAdd;
             }
@@ -27,7 +43,7 @@ namespace Ex03.GarageLogic
         private bool isSameTypeOfFuel(eFuelType i_FuelToAdd)
         {
             bool result = false;
-            if(i_FuelToAdd == m_EngineType)
+            if(i_FuelToAdd == m_FuelType)
             {
                 result = true;
             }
@@ -35,22 +51,11 @@ namespace Ex03.GarageLogic
             return result;
         }
 
-        public FuelEngine(eFuelType i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
-        {
-            m_EngineType = i_FuelType;
-            m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
-            m_RemainingEnergySource = i_RemainingEnergySource;
-        }
-
         public eFuelType FuelType
         {
             get
             {
-                return m_EngineType
-            }
-            set
-            {
-                m_EngineType = value;
+                return m_FuelType;
             }
         }
 

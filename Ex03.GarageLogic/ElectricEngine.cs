@@ -4,17 +4,22 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class ElectricEngine : EnergySourceUnit
+    class ElectricEngine : Engine
     {
 
-        public ElectricEngine(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
+        public ElectricEngine(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity) 
+            : base(i_RemainingEnergySource, i_MaximumEnergySourceCapacity)
         {
             m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
             m_RemainingEnergySource = i_RemainingEnergySource;
         }
-        public void Charge(float i_HoursToAdd)
+        public void ReCharge(float i_HoursToAdd)
         {
-            if(i_HoursToAdd < m_MaximumEnergySourceCapacity)
+            if(i_HoursToAdd + m_RemainingEnergySource > m_MaximumEnergySourceCapacity)
+            {
+                throw new ValueOutOfRangeException();   // Too much fuel //EXCEPTION to continue//
+            }
+            else
             {
                 m_RemainingEnergySource = m_RemainingEnergySource + i_HoursToAdd;
             }

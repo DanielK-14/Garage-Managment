@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
         private bool m_CarryingDangerousGoods;
         private float m_CargoCapacity;
 
-        public Truck(bool i_CarryingDangerousGoods, float i_CargoCapacity)
+        public Truck(bool i_CarryingDangerousGoods, float i_CargoCapacity)  ///Fix ctor with base class
         {
             m_CarryingDangerousGoods = i_CarryingDangerousGoods;
             m_CargoCapacity = i_CargoCapacity;
