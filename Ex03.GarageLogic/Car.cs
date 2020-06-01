@@ -22,8 +22,8 @@ namespace Ex03.GarageLogic
             FiveDoors
         }
 
-        private eCarColor m_CarColor;
-        private eDoorsAmount m_DoorsAmount;
+        protected eCarColor m_CarColor;
+        protected eDoorsAmount m_DoorsAmount;
 
         public Car(eCarColor i_CarColor, eDoorsAmount i_DoorsAmount)
         {
