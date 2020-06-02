@@ -10,14 +10,17 @@ namespace Ex03.ConsoleUI
 
         public void AddNewVehicleToGarage(string i_LicenseNumber)
         {
-            try
+            if (Garage.CheckIfLicenseIsValid(i_LicenseNumber) == true)
             {
-                GarageLogic.CheckIfLicenseIsValid(i_LicenseNumber);
-                GarageLogic.PutCarInGarage(i_LicenseNumber);
-            }
-            catch(Exception ex)
-            {
+                try
+                {
+                    Garage.ChooseVehicleType();
+                    Garage.PutCarInGarage(i_LicenseNumber);
+                }
+                catch (Exception ex)
+                {
 
+                }
             }
         }
 
