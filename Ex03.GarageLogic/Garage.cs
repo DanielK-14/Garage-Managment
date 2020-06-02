@@ -44,9 +44,9 @@ namespace Ex03.GarageLogic
         public bool CheckIfLicenseIsValid(string i_LicenseNumber)
         {
             bool result = false;
-            foreach (var in m_VehicleList)
+            foreach (Vehicle vehicle in m_VehicleList)
             {
-                if (i_LicenseNumber == var.LicenseNumber)
+                if (i_LicenseNumber == vehicle.LicenseNumber)
                 {
                     result = true;
                     break;
