@@ -7,12 +7,10 @@ namespace Ex03.GarageLogic
     class ElectricEngine : Engine
     {
 
-        public ElectricEngine(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity) 
+        public ElectricEngine(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
             : base(i_RemainingEnergySource, i_MaximumEnergySourceCapacity)
-        {
-            m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
-            m_RemainingEnergySource = i_RemainingEnergySource;
-        }
+        { }
+        
         public void ReCharge(float i_HoursToAdd)
         {
             if(i_HoursToAdd + m_RemainingEnergySource > m_MaximumEnergySourceCapacity)
@@ -23,6 +21,19 @@ namespace Ex03.GarageLogic
             {
                 m_RemainingEnergySource = m_RemainingEnergySource + i_HoursToAdd;
             }
+        }
+
+        public void ChargeToMax()
+        {
+            if(m_RemainingEnergySource < m_MaximumEnergySourceCapacity)
+            {
+                ReCharge(m_MaximumEnergySourceCapacity - m_RemainingEnergySource);
+            }
+        }
+
+        public void MakeBatteryEmpty()
+        {
+            m_RemainingEnergySource = 0;
         }
     }
 }

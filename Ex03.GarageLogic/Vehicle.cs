@@ -106,11 +106,22 @@ namespace Ex03.GarageLogic
                     break;
 
                 case Engine.eEngineType.Fuel:
+
                     break;
 
                 default:
                     throw new ArgumentException("Engine type is unknown");      ///EXCEPTION to continue///
             }
+        }
+
+        public virtual List<string> RequiredInfoForCreation()
+        {
+            List<string> requiredInfo = new List<string>();
+            requiredInfo.Add("Please enter vehicle MODEL NAME:");
+            requiredInfo.Add("Please enter LICENSE NUMBER:");
+            requiredInfo.Add("Please enter WHEELS AMOUNT:");
+
+            return requiredInfo;
         }
     }
 }

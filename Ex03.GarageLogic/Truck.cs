@@ -38,5 +38,14 @@ namespace Ex03.GarageLogic
                 m_CargoCapacity = value;
             }
         }
+
+        public override List<string> RequiredInfoForCreation()
+        {
+            List<string> requiredInfo = base.RequiredInfoForCreation();
+            requiredInfo.Add("Is the truck CARRYING DANGEROUS GOODS?");
+            requiredInfo.Add("Please enter truck's CARGO CPACITY:");
+
+            return requiredInfo;
+        }
     }
 }

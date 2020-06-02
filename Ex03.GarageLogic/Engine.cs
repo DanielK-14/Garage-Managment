@@ -1,4 +1,7 @@
-﻿namespace Ex03.GarageLogic
+﻿using System;
+using System.Collections.Generic;
+
+namespace Ex03.GarageLogic
 {
     abstract class Engine
     {
@@ -47,6 +50,16 @@
             {
                 return m_EngineType;
             }
+        }
+
+        public virtual List<string> RequiredInfoForCreation()
+        {
+            List<string> requiredInfo = new List<string>();
+            requiredInfo.Add("Please choose engine POWER SOURCE:\n" + Garage.GetEnumOptions(typeof(eEngineType)));
+            requiredInfo.Add("Please enter REMAINING POWER AMOUNT:");
+            requiredInfo.Add("Please enter MAXIMUM POWER AMOUNT:");
+
+            return requiredInfo;
         }
     }
 }

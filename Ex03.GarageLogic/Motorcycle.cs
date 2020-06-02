@@ -6,7 +6,7 @@ namespace Ex03.GarageLogic
 {
     class Motorcycle : Vehicle
     {
-        public enum eBikeLicenseType
+        public enum eLicenseType
         {
             A,
             A1,
@@ -14,16 +14,16 @@ namespace Ex03.GarageLogic
             B
         }
 
-        private eBikeLicenseType m_LicenseType;
+        private eLicenseType m_LicenseType;
         private int m_EngineCapacity;
 
-        public Motorcycle(eBikeLicenseType i_LicenseType, int i_EngineCapacity) : base()  ///Fix ctor with base class
+        public Motorcycle(eLicenseType i_LicenseType, int i_EngineCapacity) : base()  ///Fix ctor with base class
         {
             m_LicenseType = i_LicenseType;
             m_EngineCapacity = i_EngineCapacity;
         }
 
-        public eBikeLicenseType LicenseType
+        public eLicenseType LicenseType
         {
             get
             {
@@ -37,6 +37,15 @@ namespace Ex03.GarageLogic
             {
                 return m_EngineCapacity;
             }
+        }
+
+        public override List<string> RequiredInfoForCreation()
+        {
+            List<string> requiredInfo = base.RequiredInfoForCreation();
+            requiredInfo.Add("Please choose LICENSE TYPE:\n" + Garage.GetEnumOptions(typeof(eLicenseType)));
+            requiredInfo.Add("Please enter ENGINE CPACITY:");
+
+            return requiredInfo;
         }
     }
 }
