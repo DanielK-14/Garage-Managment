@@ -59,7 +59,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> RequiredInfoForCreation()
+        public static List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = base.RequiredInfoForCreation();
             requiredInfo.Add("Please enter FUEL TYPE:\n" + Garage.GetEnumOptions(typeof(eEngineType)));

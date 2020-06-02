@@ -10,6 +10,76 @@ namespace Ex03.GarageLogic
         protected Engine m_Engine;
         protected List<Wheel> m_Wheels;
 
+        public string ModelName
+        {
+            get
+            {
+                return m_ModelName;
+            }
+            set
+            {
+                m_ModelName = value;
+            }
+        }
+
+        public string LicenseNumber
+        {
+            get
+            {
+                return m_LicenseNumber;
+            }
+        }
+
+        public Engine EnergyUnit
+        {
+            get
+            {
+                return m_Engine;
+            }
+        }
+
+        public List<Wheel> Wheels
+        {
+            get
+            {
+                return m_Wheels;
+            }
+        }
+
+        public virtual void FillEngineSourceUnit(float i_AmountToInsert, object obj)
+        {
+            switch (m_Engine.EngineType)
+            {
+                case Engine.eEngineType.Electric:
+                    
+                    break;
+
+                case Engine.eEngineType.Fuel:
+
+                    break;
+
+                default:
+                    throw new ArgumentException("Engine type is unknown");      ///EXCEPTION to continue///
+            }
+        }
+
+        public virtual List<string> RequiredInfoForCreation()
+        {
+            List<string> engineInformation = m_Engine.RequiredInfoForCreation();
+            List<string> wheelsInformation = m_Wheels[0].RequiredInfoForCreation();
+            List<string> requiredInfo = new List<string>();
+
+            requiredInfo.Add("Please enter vehicle MODEL NAME:");
+            requiredInfo.Add("Please enter LICENSE NUMBER:");
+            foreach(string info in engineInformation)
+            {
+                requiredInfo.Add(info);
+            }
+            requiredInfo.Add("Please enter WHEELS AMOUNT:");
+
+            return requiredInfo;
+        }
+
         public class Wheel
         {
             private string m_ManufacturerName;
@@ -58,70 +128,22 @@ namespace Ex03.GarageLogic
             public void AddAirTillMaxPressure()
             {
                 float difference = m_MaximumAirPressure - m_CurrentAirPressure;
-                if(difference > 0)
+                if (difference > 0)
                 {
                     AddAirToWheel(difference);
                 }
             }
-        }
 
-        public string ModelName
-        {
-            get
+            public virtual List<string> RequiredInfoForCreation()
             {
-                return m_ModelName;
+                List<string> requiredInfo = new List<string>();
+
+                requiredInfo.Add("Please enter WHEEL'S MANUFACTURER NAME:");
+                requiredInfo.Add("Please enter current WHEEL'S AIR PRESSURE:");
+                requiredInfo.Add("Please enter WHEEL'S MAXIMUM AIR PRESSURE:");
+
+                return requiredInfo;
             }
-        }
-
-        public string LicenseNumber
-        {
-            get
-            {
-                return m_LicenseNumber;
-            }
-        }
-
-        public Engine EnergyUnit
-        {
-            get
-            {
-                return m_Engine;
-            }
-        }
-
-        public List<Wheel> Wheels
-        {
-            get
-            {
-                return m_Wheels;
-            }
-        }
-
-        public virtual void FillEngineSourceUnit(float i_AmountToInsert, object obj)
-        {
-            switch (m_Engine.EngineType)
-            {
-                case Engine.eEngineType.Electric:
-                    
-                    break;
-
-                case Engine.eEngineType.Fuel:
-
-                    break;
-
-                default:
-                    throw new ArgumentException("Engine type is unknown");      ///EXCEPTION to continue///
-            }
-        }
-
-        public virtual List<string> RequiredInfoForCreation()
-        {
-            List<string> requiredInfo = new List<string>();
-            requiredInfo.Add("Please enter vehicle MODEL NAME:");
-            requiredInfo.Add("Please enter LICENSE NUMBER:");
-            requiredInfo.Add("Please enter WHEELS AMOUNT:");
-
-            return requiredInfo;
         }
     }
 }
