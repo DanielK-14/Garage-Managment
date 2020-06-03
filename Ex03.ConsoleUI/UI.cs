@@ -10,12 +10,25 @@ namespace Ex03.ConsoleUI
 
         public void AddNewVehicleToGarage(string i_LicenseNumber)
         {
+            List<string> info;
+            List<string> buildInstructions = new List<string>();
+            string vehicleChoose = string.Empty;
+            string vehicleInfo = string.Empty;
+
             if (Garage.CheckIfLicenseIsValid(i_LicenseNumber) == true)
             {
                 try
                 {
-                    Garage.ChooseVehicleType();
-                    Garage.PutCarInGarage(i_LicenseNumber);
+                    Console.WriteLine("Please choose cehicle: (1)motorccycle (2)car (3)truck");
+                    vehicleChoose = Console.ReadLine();
+                    info = Garage.ChooseVehicleType(vehicleChoose);
+                    foreach(string sentense in info)
+                    {
+                        Console.WriteLine(sentense);
+                        vehicleInfo = Console.ReadLine();
+                        buildInstructions.Add(vehicleInfo);
+                    }
+                    Garage.PutNewCarInGarage(vehicleChoose, i_LicenseNumber, buildInstructions);
                 }
                 catch (Exception ex)
                 {
