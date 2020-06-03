@@ -6,7 +6,6 @@ namespace Ex03.GarageLogic
 {
     class ElectricEngine : Engine
     {
-
         public ElectricEngine(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
             : base(i_RemainingEnergySource, i_MaximumEnergySourceCapacity)
         { }
@@ -34,6 +33,11 @@ namespace Ex03.GarageLogic
         public void MakeBatteryEmpty()
         {
             m_RemainingEnergySource = 0;
+        }
+
+        public static List<string> RequiredInfoForCreation()
+        {
+            return Engine.RequiredInfoForCreation();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Ex03.GarageLogic
     {
         public enum eFuelType
         {
-            Soler,
+            Soler = 1,
             Octan95,
             Octan96,
             Octan98
@@ -61,7 +61,7 @@ namespace Ex03.GarageLogic
 
         public static List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = base.RequiredInfoForCreation();
+            List<string> requiredInfo = Engine.RequiredInfoForCreation();
             requiredInfo.Add("Please enter FUEL TYPE:\n" + Garage.GetEnumOptions(typeof(eEngineType)));
 
             return requiredInfo;

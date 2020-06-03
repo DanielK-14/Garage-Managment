@@ -8,7 +8,7 @@ namespace Ex03.GarageLogic
     {
         public enum eCarColor
         {
-            Red,
+            Red = 1,
             White,
             Black,
             Silver
@@ -16,7 +16,7 @@ namespace Ex03.GarageLogic
 
         public enum eDoorsAmount
         {
-            TwoDoors,
+            TwoDoors = 1,
             ThreeDoors,
             FourDoors,
             FiveDoors
@@ -25,7 +25,8 @@ namespace Ex03.GarageLogic
         private eCarColor m_CarColor;
         private eDoorsAmount m_DoorsAmount;
 
-        public Car(string i_ModelName, string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount) : base()   ///Fix ctor with base class
+        public Car(string i_ModelName, string i_LicenseNumber, Engine i_Engine, int i_WheelsAmount, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount) 
+            : base(i_ModelName, i_LicenseNumber, i_Engine, i_WheelsAmount)  
         {
             m_CarColor = i_CarColor;
             m_DoorsAmount = i_DoorsAmount;
@@ -51,9 +52,9 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> RequiredInfoForCreation()
+        public static List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = base.RequiredInfoForCreation();
+            List<string> requiredInfo = Vehicle.RequiredInfoForCreation();
             requiredInfo.Add("Please choose COLOR:\n" + Garage.GetEnumOptions(typeof(eCarColor)));
             requiredInfo.Add("Please choose DOORS AMOUNT:\n" + Garage.GetEnumOptions(typeof(eDoorsAmount)));
 
