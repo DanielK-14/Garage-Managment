@@ -7,7 +7,17 @@ namespace Ex03.ConsoleUI
     class UI
     {
 
-
+        private const string k_MainMenuText =
+     @"Please choose from the following options (1-8):
+        1. Add a new vehicle to garage.
+        2. Display license plate numbers for all vehicles in the garage.
+        3. Modify a vehicle's status.
+        4. Inflate a vehicle's wheels to maximum.
+        5. Refuel a gasoline-powered vehicle.
+        6. Charge an electric vehicle.
+        7. Display full details of a vehicle.
+        8. Quit.
+        ";
         //public void AddNewVehicleToGarage(string i_LicenseNumber)
         //{
         //    List<string> info;
@@ -37,13 +47,112 @@ namespace Ex03.ConsoleUI
         //    }
         //}
 
-        public void AddNewVehicleToGarage()
+        static bool s_ExitProgram = false;
+
+        public static void start()
         {
-            string input;
+            int userMenuSelection;
+            string userInput;
+            bool valid = false;
+            
+            while (!s_ExitProgram)
+            {
+                try
+                {
+                    Console.Clear();
+                    showActionsMenu();
+                    userInput = Console.ReadLine();
+                    do
+                    {
+                        valid = Int32.TryParse(userInput, out userMenuSelection);
+                    }
+                    while (valid == false);
+                    handleUserSelection(userMenuSelection);
+                }
+                catch ()
+                {
+                    Console.WriteLine("Error...");
+                }
+
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadLine();
+            }
+        }
+        private static void handleUserSelection(int i_UserChoose, string i_LicenseNumber)
+        {
+            switch (i_UserChoose)
+            {
+                case 1:
+                    AddNewVehicleToGarage();
+                    break;
+                case 2:
+                    ShowLicenseNumbers();
+                    break;
+                case 3:
+                    ChangeVehicleStatues();
+                    break;
+                case 4:
+                    FilVehicleWheelsAirToMax(i_LicenseNumber);
+                    break;
+                case 5:
+                    FuelUpTank(i_LicenseNumber, eFuelType i_FuelType, i_AmountOfFuel);
+                    break;
+                case 6:
+                    ChargeElectricVehicle(i_LicenseNumber, i_amountOfMinutesToCharge);
+                    break;
+                case 7:
+                    ShowFullInfo(i_LicenseNumber);
+                case 8:
+                    s_ExitProgram = true;
+                default:
+                    break;
+            }
 
         }
 
-        public void ShowLicenseNumbers()
+        public static void AddNewVehicleToGarage()
+        {
+            int vehicle, amountOfGoodInstructions = 0;
+            bool valid = false;
+            string input;
+            List<string> info;
+            List<string> buildInstructions = new List<string>();
+            string vehicleChoose = string.Empty;
+            string vehicleInfo = string.Empty;
+
+
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Please choose vehicle: (1)motorccycle (2)car (3)truck");
+                input = Console.ReadLine();
+                valid = Int32.TryParse(input, out vehicle);
+            }
+            while (valid == false);
+
+            info = Garage.ChooseVehicleType(vehicleChoose);
+
+            try
+            {
+                Console.WriteLine("Please choose cehicle: (1)motorccycle (2)car (3)truck"); //To change
+                vehicleChoose = Console.ReadLine();
+                info = Garage.ChooseVehicleType(vehicleChoose);
+                foreach (string sentense in info)
+                {
+                    Console.WriteLine(sentense);
+                    vehicleInfo = Console.ReadLine();
+                    buildInstructions.Add(vehicleInfo);
+                }
+                Garage.PutNewCarInGarage(vehicleChoose, i_LicenseNumber, buildInstructions);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
+        }
+
+        public static void ShowLicenseNumbers()
         {
             string carSituation;
             GarageLogic.ShowVehiclesLicenseInGarage();
@@ -63,7 +172,7 @@ namespace Ex03.ConsoleUI
             } 
         }
 
-        public void ChangeVehicleStatues()
+        public static void ChangeVehicleStatues()
         {
             string situation, licenseNumber;
             bool valid = false;
@@ -78,7 +187,7 @@ namespace Ex03.ConsoleUI
             GarageLogic.ChangeCarSituation(licenseNumber, situation);
         }
 
-        public void FilVehicleWheelsAirToMax(string i_LicenseNumber)
+        public static void FilVehicleWheelsAirToMax(string i_LicenseNumber)
         {
             if(GarageLogic.IsValidLicenseNumber(i_LicenseNumber) == true)
             {
@@ -90,7 +199,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public void FuelUpTank(string i_LicenseNumber, eFuelType i_FuelType, float i_AmountOfFuel)
+        public static void FuelUpTank(string i_LicenseNumber, eFuelType i_FuelType, float i_AmountOfFuel)
         {
             if(GarageLogic.IsFuelVehicleExists(i_LicenseNumber, i_FuelType) == true)
             {
@@ -102,7 +211,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public void ChargeElectricVehicle(string i_LicenseNumber, int i_amountOfMinutesToCharge)
+        public static void ChargeElectricVehicle(string i_LicenseNumber, int i_amountOfMinutesToCharge)
         {
             if (GarageLogic.IsElectricVehicleExists(i_LicenseNumber) == true)
             {
@@ -114,7 +223,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public void ShowFullInfo(string i_LicenseNumber)
+        public static void ShowFullInfo(string i_LicenseNumber)
         {
             if(GarageLogic.IsLicensenumberExist(i_LicenseNumber) == true)
             {

@@ -76,7 +76,7 @@ namespace Ex03.GarageLogic
         {
             if(ValidCarInfo(i_BuildInstructions) == true)
             {
-                string i_ModelName, string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount
+                //string i_ModelName, string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount
                 Car car = new Car(i_BuildInstructions[0], i_BuildInstructions[1]);
                 
             }
@@ -123,17 +123,17 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public List<string> ChooseVehicleType(string i_UserInput)
+        public List<string> ChooseVehicleType(int i_UserInput)
         {
             List<string> result;
 
             switch (i_UserInput)
             {
-                case "1":
+                case 1:
                     result = Motorcycle.RequiredInfoForCreation();
-                case "2":
+                case 2:
                     result = Car.RequiredInfoForCreation();
-                case "3":
+                case 3:
                     result = Truck.RequiredInfoForCreation();
                 default:
                     result = null;
@@ -224,16 +224,16 @@ namespace Ex03.GarageLogic
 
         public bool IsValidCarColor(string i_CarColor)
         {
-            return Enum.IsDefined(Car.eCarColor, i_CarColor);
+            return Enum.IsDefined(typeof(Car.eCarColor), i_CarColor);
         }
         public bool IsValidCarDoorsAmount(string i_CarDoorsAmount)
         {
-            return Enum.IsDefined(Car.eDoorsAmount, i_CarDoorsAmount);
+            return Enum.IsDefined(typeof(Car.eDoorsAmount), i_CarDoorsAmount);
 
         }
         public bool IsValidDangerousGoods(string i_DangerousGoods)
         {
-            return Enum.IsDefined(Car.eCarColor, i_DangerousGoods);
+            return Enum.IsDefined(typeof(Car.eCarColor), i_DangerousGoods);
 
         }
         public bool IsValidCargoCapacity(string i_CargoCapacity)
