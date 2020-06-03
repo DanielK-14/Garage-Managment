@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
 
@@ -180,27 +181,49 @@ namespace Ex03.GarageLogic
 
         public bool IsValidCarColor(string i_CarColor)
         {
-
+            return Enum.IsDefined(Car.eCarColor, i_CarColor);
         }
         public bool IsValidCarDoorsAmount(string i_CarDoorsAmount)
         {
+            return Enum.IsDefined(Car.eDoorsAmount, i_CarDoorsAmount);
 
         }
         public bool IsValidDangerousGoods(string i_DangerousGoods)
         {
+            return Enum.IsDefined(Car.eCarColor, i_DangerousGoods);
 
         }
         public bool IsValidCargoCapacity(string i_CargoCapacity)
         {
+            bool valid = true;
+            foreach (char ch in i_CargoCapacity)
+            {
+                if (ch > 57 && ch < 48)
+                {
+                    valid = false;
+                }
+            }
+
+            return valid;
 
         }
         public bool IsValidLicenseType(string i_LicenseType)
         {
+            return Enum.IsDefined(Motorcycle.eLicenseType, i_LicenseType);
 
         }
         public bool IsValidEngineCapacity(string i_EngineCapacity)
         {
+            bool valid = true;
+            foreach(char ch in i_EngineCapacity)
+            {
+                if(ch > 57 && ch < 48)
+                {
+                    valid = false;
+                }
+            }
 
+            return valid;
         }
     }
 }
