@@ -5,20 +5,33 @@ namespace Ex03.GarageLogic
 {
     abstract class Vehicle
     {
-        protected string m_ModelName;
-        protected string m_LicenseNumber;
-        protected Engine m_Engine;
-        protected List<Wheel> m_Wheels;
+        public enum eVehicleStatus
+        {
+            Pending = 1,
+            InRepair,
+            Fixed,
+        }
+
+        protected readonly string m_ModelName;
+        protected readonly string m_LicenseNumber;
+        protected readonly Engine m_Engine;
+        protected readonly List<Wheel> m_Wheels;
+        protected eVehicleStatus m_Status;
+
+        public Vehicle(string i_ModelName, string i_LicenseNumber, Engine i_Engine, int i_WheelsAmount)
+        {
+            m_ModelName = i_ModelName;
+            m_LicenseNumber = i_LicenseNumber;
+            m_Engine = i_Engine;
+            m_Wheels = new List<Wheel>(i_WheelsAmount);
+            m_Status = eVehicleStatus.Pending;
+        }
 
         public string ModelName
         {
             get
             {
                 return m_ModelName;
-            }
-            set
-            {
-                m_ModelName = value;
             }
         }
 
@@ -46,27 +59,39 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public virtual void FillEngineSourceUnit(float i_AmountToInsert, object obj)
+        public eVehicleStatus Status
+        {
+            get
+            {
+                return m_Status;
+            }
+            set
+            {
+                m_Status = value;
+            }
+        }
+
+        public virtual void FillEngineSourceUnit(float i_AmountToInsert, int i_FuelType)
         {
             switch (m_Engine.EngineType)
             {
                 case Engine.eEngineType.Electric:
-                    
+                    ((ElectricEngine)m_Engine).ReCharge(i_AmountToInsert);
                     break;
 
                 case Engine.eEngineType.Fuel:
-
+                    ((FuelEngine)m_Engine).Refuel(i_AmountToInsert, (FuelEngine.eFuelType)i_FuelType);
                     break;
 
                 default:
-                    throw new ArgumentException("Engine type is unknown");      ///EXCEPTION to continue///
+                    throw new ArgumentException("Engine type is unknown");
             }
         }
 
-        public virtual List<string> RequiredInfoForCreation()
+        public static List<string> RequiredInfoForCreation()
         {
-            List<string> engineInformation = m_Engine.RequiredInfoForCreation();
-            List<string> wheelsInformation = m_Wheels[0].RequiredInfoForCreation();
+            List<string> engineInformation = Engine.RequiredInfoForCreation();
+            List<string> wheelsInformation = Wheel.RequiredInfoForCreation();
             List<string> requiredInfo = new List<string>();
 
             requiredInfo.Add("Please enter vehicle MODEL NAME:");
@@ -78,6 +103,27 @@ namespace Ex03.GarageLogic
             requiredInfo.Add("Please enter WHEELS AMOUNT:");
 
             return requiredInfo;
+        }
+
+        public static bool IsInfoInputValid(string i_Input, int i_ValueNumber)
+        {
+            bool result;
+            switch(i_ValueNumber)
+            {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.m_LicenseNumber.GetHashCode();
         }
 
         public class Wheel
@@ -134,7 +180,7 @@ namespace Ex03.GarageLogic
                 }
             }
 
-            public virtual List<string> RequiredInfoForCreation()
+            public static List<string> RequiredInfoForCreation()
             {
                 List<string> requiredInfo = new List<string>();
 

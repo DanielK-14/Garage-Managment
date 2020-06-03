@@ -7,7 +7,7 @@ namespace Ex03.GarageLogic
     {
         public enum eEngineType
         {
-            Electric,
+            Electric = 1,
             Fuel,
         }
 
@@ -52,7 +52,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public virtual List<string> RequiredInfoForCreation()
+        public static List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = new List<string>();
             requiredInfo.Add("Please choose engine POWER SOURCE:\n" + Garage.GetEnumOptions(typeof(eEngineType)));

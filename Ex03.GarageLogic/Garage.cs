@@ -9,19 +9,62 @@ namespace Ex03.GarageLogic
 {
     public class Garage
     {
-        public enum eVegicleType
+        public enum eVehicleType
         {
-            Motorcycle,
+            Motorcycle = 1,
             Car,
-            Truck,
+            Truck
         }
 
         List<Vehicle> m_VehicleList;
 
-        public void BuildNewVehicle()
+        public List<string> ChooseNewVehicle()
         {
+            List<string> vehiclesTypes = new List<string>();
+            vehiclesTypes.Add("Please choose vehicle type:\n" + GetEnumOptions(typeof(eVehicleType)));
+            return vehiclesTypes;
+        }
+
+        public bool IsVehicleSelectionValid(string i_Selection)
+        {
+            int selectionNumber = int.Parse(i_Selection);
+            return Enum.IsDefined(typeof(eVehicleType), selectionNumber);
+        }
+
+        public List<string> GetAllInformationRequiredForThisTypeOfVehicle(string i_VehicleChosen)
+        {
+            eVehicleType vehicleType = (eVehicleType) int.Parse(i_VehicleChosen);
+            List<string> requiredInfo;
+
+            switch(vehicleType)
+            {
+                case eVehicleType.Motorcycle:
+                    requiredInfo = Motorcycle.RequiredInfoForCreation();
+                    break;
+
+                case eVehicleType.Car:
+                    requiredInfo = Car.RequiredInfoForCreation();
+                    break;
+
+                case eVehicleType.Truck:
+                    requiredInfo = Truck.RequiredInfoForCreation();
+                    break;
+
+                default:
+                    throw new FormatException();
+            }
+
+            return requiredInfo;
+        }
+
+        public bool IsValueInputedValidForCreation
+
+        public List<string> AddSelectedVehicle(string i_Selection)
+        {
+            eVehicleType type = (eVehicleType)int.Parse(i_Selection);
             
         }
+
         public void BuildNewMotorcycle(string i_LicenseNumber, List<string> i_BuildInstructions)
         {
             if(ValidMotorcycleInfo(i_BuildInstructions) == true)
@@ -227,3 +270,4 @@ namespace Ex03.GarageLogic
         }
     }
 }
+

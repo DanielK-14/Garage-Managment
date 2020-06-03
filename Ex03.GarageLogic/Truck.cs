@@ -9,7 +9,8 @@ namespace Ex03.GarageLogic
         private bool m_CarryingDangerousGoods;
         private float m_CargoCapacity;
 
-        public Truck(bool i_CarryingDangerousGoods, float i_CargoCapacity)  ///Fix ctor with base class
+        public Truck(string i_ModelName, string i_LicenseNumber, Engine i_Engine, int i_WheelsAmount, bool i_CarryingDangerousGoods, float i_CargoCapacity)
+            : base(i_ModelName, i_LicenseNumber, i_Engine, i_WheelsAmount)
         {
             m_CarryingDangerousGoods = i_CarryingDangerousGoods;
             m_CargoCapacity = i_CargoCapacity;
@@ -39,9 +40,9 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> RequiredInfoForCreation()
+        public static List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = base.RequiredInfoForCreation();
+            List<string> requiredInfo = Vehicle.RequiredInfoForCreation();
             requiredInfo.Add("Is the truck CARRYING DANGEROUS GOODS?");
             requiredInfo.Add("Please enter truck's CARGO CPACITY:");
 
