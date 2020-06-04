@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
     class UI
     {
+
+        Garage garage = new Garage();
 
         private const string k_MainMenuText =
      @"Please choose from the following options (1-8):
@@ -112,13 +115,15 @@ namespace Ex03.ConsoleUI
 
         public static void AddNewVehicleToGarage()
         {
-            int vehicle, amountOfGoodInstructions = 0;
-            bool valid = false;
+            int vehicle, amountOfGoodInstructions = 0, maxInstructionsForVehicle = 0;
+            bool valid = false, succesRequest = false;
             string input;
             List<string> info;
             List<string> buildInstructions = new List<string>();
             string vehicleChoose = string.Empty;
             string vehicleInfo = string.Empty;
+            string licenseNumber;
+            string Request;
 
 
             do
@@ -126,29 +131,56 @@ namespace Ex03.ConsoleUI
                 Console.Clear();
                 Console.WriteLine("Please choose vehicle: (1)motorccycle (2)car (3)truck");
                 input = Console.ReadLine();
-                valid = Int32.TryParse(input, out vehicle);
+                //valid = Int32.TryParse(input, out vehicle);
+                valid = Garage.ValidVehicleType(input, out vehicle);
             }
             while (valid == false);
 
-            info = Garage.ChooseVehicleType(vehicleChoose);
 
-            try
+            Console.WriteLine("Please enter license number: ");
+            licenseNumber = Console.ReadLine();
+            if(Garage.IsInGarage(licenseNumber) == true)
             {
-                Console.WriteLine("Please choose cehicle: (1)motorccycle (2)car (3)truck"); //To change
-                vehicleChoose = Console.ReadLine();
-                info = Garage.ChooseVehicleType(vehicleChoose);
-                foreach (string sentense in info)
+                Garage.ChangeStatuesToFixing(licenseNumber); /// to do func ChangeStatuesToFixing
+            }
+            else
+            {
+                info = Garage.ChooseVehicleType(vehicle, out maxInstructionsForVehicle);
+                foreach(string instrucion in info)
                 {
-                    Console.WriteLine(sentense);
-                    vehicleInfo = Console.ReadLine();
-                    buildInstructions.Add(vehicleInfo);
-                }
-                Garage.PutNewCarInGarage(vehicleChoose, i_LicenseNumber, buildInstructions);
-            }
-            catch (Exception ex)
-            {
+                    do
+                    {
+                        Console.WriteLine(instrucion);
+                        Request = Console.ReadLine();
+                        succesRequest = Garage.BuildNewVehicle(vehicle, Request, licenseNumber, out buildInstructions, amountOfGoodInstructions);
+                        if(succesRequest == true)
+                        {
+                            amountOfGoodInstructions++;
+                        }
+                    }
+                    while (succesRequest == false);
 
+                    succesRequest = false;
+                }
+                Garage.MakeVehicleAndPlaceInGarage(buildInstructions);
+
+
+                //try
+                //{
+                //    foreach (string sentense in info)
+                //    {
+                //        Console.WriteLine(sentense);
+                //        vehicleInfo = Console.ReadLine();
+                //        buildInstructions.Add(vehicleInfo);
+                //    }
+                //    Garage.PutNewCarInGarage(vehicleChoose, i_LicenseNumber, buildInstructions);
+                //}
+                //catch (Exception ex)
+                //{
+
+                //}
             }
+            
             
         }
 
