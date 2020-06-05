@@ -152,95 +152,91 @@ namespace Ex03.ConsoleUI
                     {
                         Console.WriteLine(instrucion);
                         Request = Console.ReadLine();
-                        succesRequest = Garage.BuildNewVehicle(vehicle, Request, licenseNumber, out buildInstructions, amountOfGoodInstructions);
+                        succesRequest = Garage.BuildNewVehicle(vehicle, Request, licenseNumber, amountOfGoodInstructions);
                         if(succesRequest == true)
                         {
                             amountOfGoodInstructions++;
+                            buildInstructions.Add(Request);
                         }
                     }
                     while (succesRequest == false);
 
                     succesRequest = false;
                 }
-                Garage.MakeVehicleAndPlaceInGarage(buildInstructions);
-
-
-                //try
-                //{
-                //    foreach (string sentense in info)
-                //    {
-                //        Console.WriteLine(sentense);
-                //        vehicleInfo = Console.ReadLine();
-                //        buildInstructions.Add(vehicleInfo);
-                //    }
-                //    Garage.PutNewCarInGarage(vehicleChoose, i_LicenseNumber, buildInstructions);
-                //}
-                //catch (Exception ex)
-                //{
-
-                //}
+                Garage.MakeVehicleAndPlaceInGarage(buildInstructions, vehicle);
             }
-            
-            
         }
 
         public static void ShowLicenseNumbers()
         {
-            string carSituation;
-            GarageLogic.ShowVehiclesLicenseInGarage();
-            Console.WriteLine("Show vehicles in the situation: ");
-            carSituation = Console.ReadLine();
-            if(GarageLogic.IsValidSituation(carSituation))
+            int carSituation;
+            string userInput;
+            bool valid = false;
+            do
             {
-                switch(carSituation)
-                {
-                    case "fix":
-                        return GarageLogic.ShowFixCars();
-                    case "inrepair":
-                        return GarageLogic.ShowInrepair();
-                    case "paied":
-                        return GarageLogic.ShowPaied();
-                }
-            } 
+                Console.WriteLine("Show vehicles in the situation (1)InReapair (2)Fixed (3)Paied (4)All: ");
+                userInput = Console.ReadLine();
+                valid = int.TryParse(userInput, out carSituation);
+            }
+            while (valid == true && carSituation > 0 && carSituation < 5);
+
+            List<string> LicensesList= Garage.ShowVehiclesInSituation(carSituation);
+
+            foreach(string LicenseNumber in LicensesList)
+            {
+                Console.WriteLine(LicenseNumber);
+            }
         }
 
         public static void ChangeVehicleStatues()
         {
-            string situation, licenseNumber;
+            string licenseNumber, userInput;
+            int situation;
             bool valid = false;
             do
             {
-                Console.WriteLine("Please enter license number and then the vehicle situation: ");
+                Console.WriteLine("Please enter license: ");
                 licenseNumber = Console.ReadLine();
-                situation = Console.ReadLine();
+                Console.WriteLine("Enter situation (1)InRepair (2)Fixed (3)Paied: ");
+                userInput = Console.ReadLine();
+                valid = Int32.TryParse(userInput, out situation);
             }
-            while (valid == false);
+            while (valid == false && (situation < 1 || situation > 3));
 
             GarageLogic.ChangeCarSituation(licenseNumber, situation);
         }
 
         public static void FilVehicleWheelsAirToMax(string i_LicenseNumber)
         {
-            if(GarageLogic.IsValidLicenseNumber(i_LicenseNumber) == true)
+            bool valid = false;
+            string userInput;
+            do
             {
-                GarageLogic.FillTiresAir(i_LicenseNumber);
+                Console.WriteLine("Please enter license number to fill Air in the wheels: ");
+                userInput = Console.ReadLine();
+                valid = Garage.FillAirInVehicle(userInput);
             }
-            else
-            {
-                Console.WriteLine("The license number is not valid!");
-            }
+            while (valid == false);
         }
 
-        public static void FuelUpTank(string i_LicenseNumber, eFuelType i_FuelType, float i_AmountOfFuel)
+        public static void FuelUpTank()
         {
-            if(GarageLogic.IsFuelVehicleExists(i_LicenseNumber, i_FuelType) == true)
+            bool valid = false;
+            int fuel;
+            string userInput, fuelType, amount;
+
+            do
             {
-                GarageLogic.FillUpTank(i_LicenseNumber, i_AmountOfFuel);
+                Console.WriteLine("Please enter license number to fuel up tank: ");
+                userInput = Console.ReadLine();
+                Console.WriteLine("Chose fuel type (1)Soler (2)Octan95 (3)Octan96 (4)Octan98: ");
+                fuelType = Console.ReadLine();
+                Console.WriteLine("How much fuel do you want? ");
+                amount = Console.ReadLine();
+                valid = Int32.TryParse(fuelType, out fuel);
+                valid = Garage.FillUpTank(userInput, fuel, amount);
             }
-            else
-            {
-                Console.WriteLine("License number with that fuel type does not exist");
-            }
+            while (valid == false );
         }
 
         public static void ChargeElectricVehicle(string i_LicenseNumber, int i_amountOfMinutesToCharge)

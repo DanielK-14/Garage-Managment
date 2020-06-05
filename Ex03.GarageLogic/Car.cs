@@ -25,12 +25,12 @@ namespace Ex03.GarageLogic
         private eCarColor m_CarColor;
         private eDoorsAmount m_DoorsAmount;
 
-        public Car(string i_ModelName, string i_LicenseNumber, Engine i_Engine, int i_WheelsAmount, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount) 
-            : base(i_ModelName, i_LicenseNumber, i_Engine, i_WheelsAmount)  
+        public Car(string i_ModelName, string i_LicenseNumber, Engine i_Engine, string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount) 
+            : base(i_ModelName, i_LicenseNumber, i_Engine, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)  
         {
             m_CarColor = i_CarColor;
             m_DoorsAmount = i_DoorsAmount;
-    }
+        }
 
         public eCarColor CarColor
         {

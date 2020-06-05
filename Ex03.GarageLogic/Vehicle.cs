@@ -7,9 +7,9 @@ namespace Ex03.GarageLogic
     {
         public enum eVehicleStatus
         {
-            Pending = 1,
-            InRepair,
+            InRepair = 1,
             Fixed,
+            Paied,
         }
 
         protected readonly string m_ModelName;
@@ -18,13 +18,13 @@ namespace Ex03.GarageLogic
         protected readonly List<Wheel> m_Wheels;
         protected eVehicleStatus m_Status;
 
-        public Vehicle(string i_ModelName, string i_LicenseNumber, Engine i_Engine, int i_WheelsAmount)
+        public Vehicle(string i_ModelName, string i_LicenseNumber, Engine i_Engine, string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount)
         {
             m_ModelName = i_ModelName;
             m_LicenseNumber = i_LicenseNumber;
             m_Engine = i_Engine;
             m_Wheels = new List<Wheel>(i_WheelsAmount);
-            m_Status = eVehicleStatus.Pending;
+            m_Status = eVehicleStatus.InRepair;
         }
 
         public string ModelName
@@ -91,12 +91,16 @@ namespace Ex03.GarageLogic
         public static List<string> RequiredInfoForCreation()
         {
             List<string> engineInformation = Engine.RequiredInfoForCreation();
-            List<string> wheelsInformation = Wheel.RequiredInfoForCreation();
+            List<string> wheelsInformation = Engine.RequiredInfoForCreation();
             List<string> requiredInfo = new List<string>();
 
             requiredInfo.Add("Please enter vehicle MODEL NAME:");
             requiredInfo.Add("Please enter LICENSE NUMBER:");
             foreach(string info in engineInformation)
+            {
+                requiredInfo.Add(info);
+            }
+            foreach (string info in wheelsInformation)
             {
                 requiredInfo.Add(info);
             }
@@ -119,6 +123,8 @@ namespace Ex03.GarageLogic
                 case 4:
                     break;
             }
+
+            return result;
         }
 
         public override int GetHashCode()
@@ -171,6 +177,14 @@ namespace Ex03.GarageLogic
                 }
             }
 
+            public void AddAirTillMaxPressure()
+            {
+                float difference = m_MaximumAirPressure - m_CurrentAirPressure;
+                if (difference > 0)
+                {
+                    AddAirToWheel(difference);
+                }
+            }
             public void AddAirTillMaxPressure()
             {
                 float difference = m_MaximumAirPressure - m_CurrentAirPressure;

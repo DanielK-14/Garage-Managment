@@ -15,8 +15,9 @@ namespace Ex03.GarageLogic
         protected float m_RemainingEnergySource;
         protected float m_MaximumEnergySourceCapacity;
 
-        public Engine(float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
+        public Engine(eEngineType i_EngineType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
         {
+            m_EngineType = i_EngineType;
             m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
             m_RemainingEnergySource = i_RemainingEnergySource;
         }
