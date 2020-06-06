@@ -271,7 +271,16 @@ namespace Ex03.GarageLogic
 
             return valid;
         }
-        
+        public void ChangeStatuesToInRepair(string i_License)
+        {
+            foreach(Vehicle vehicle in m_VehicleList)
+            {
+                if(vehicle.LicenseNumber == i_License)
+                {
+                    vehicle.Status = (Vehicle.eVehicleStatus)1;
+                }
+            }
+        }
         public bool IsValidMaximumPowerAmount(string i_MaximumPowerAmount, int i_VehicleTypre)
         {
             bool valid = false;

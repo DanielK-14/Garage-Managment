@@ -8,7 +8,7 @@ namespace Ex03.ConsoleUI
     public class UI
     {
 
-        Garage garage = new Garage();
+        private static Garage garage = new Garage();
 
         private const string k_MainMenuText =
      @"Please choose from the following options (1-8):
@@ -21,34 +21,6 @@ namespace Ex03.ConsoleUI
         7. Display full details of a vehicle.
         8. Quit.
         ";
-        //public void AddNewVehicleToGarage(string i_LicenseNumber)
-        //{
-        //    List<string> info;
-        //    List<string> buildInstructions = new List<string>();
-        //    string vehicleChoose = string.Empty;
-        //    string vehicleInfo = string.Empty;
-
-        //    if (Garage.CheckIfLicenseIsValid(i_LicenseNumber) == true)
-        //    {
-        //        try
-        //        {
-        //            Console.WriteLine("Please choose cehicle: (1)motorccycle (2)car (3)truck"); //To change
-        //            vehicleChoose = Console.ReadLine();
-        //            info = Garage.ChooseVehicleType(vehicleChoose);
-        //            foreach(string sentense in info)
-        //            {
-        //                Console.WriteLine(sentense);
-        //                vehicleInfo = Console.ReadLine();
-        //                buildInstructions.Add(vehicleInfo);
-        //            }
-        //            Garage.PutNewCarInGarage(vehicleChoose, i_LicenseNumber, buildInstructions);
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //        }
-        //    }
-        //}
 
         static bool s_ExitProgram = false;
 
@@ -133,28 +105,27 @@ namespace Ex03.ConsoleUI
                 Console.Clear();
                 Console.WriteLine("Please choose vehicle: (1)motorccycle (2)car (3)truck");
                 input = Console.ReadLine();
-                //valid = Int32.TryParse(input, out vehicle);
-                valid = Garage.ValidVehicleType(input, out vehicle);
+                valid = garage.ValidVehicleType(input, out vehicle);
             }
             while (valid == false);
 
 
             Console.WriteLine("Please enter license number: ");
             licenseNumber = Console.ReadLine();
-            if(Garage.IsInGarage(licenseNumber) == true)
+            if(garage.IsInGarage(licenseNumber) == true)
             {
-                Garage.ChangeStatuesToFixing(licenseNumber); /// to do func ChangeStatuesToFixing
+                garage.ChangeStatuesToInRepair(licenseNumber);
             }
             else
             {
-                info = Garage.ChooseVehicleType(vehicle, out maxInstructionsForVehicle);
+                info = garage.ChooseVehicleType(vehicle, out maxInstructionsForVehicle);
                 foreach(string instrucion in info)
                 {
                     do
                     {
                         Console.WriteLine(instrucion);
                         Request = Console.ReadLine();
-                        succesRequest = Garage.BuildNewVehicle(vehicle, Request, licenseNumber, amountOfGoodInstructions);
+                        succesRequest = garage.BuildNewVehicle(vehicle, Request, licenseNumber, amountOfGoodInstructions);
                         if(succesRequest == true)
                         {
                             amountOfGoodInstructions++;
@@ -165,7 +136,7 @@ namespace Ex03.ConsoleUI
 
                     succesRequest = false;
                 }
-                Garage.MakeVehicleAndPlaceInGarage(buildInstructions, vehicle);
+                garage.MakeVehicleAndPlaceInGarage(buildInstructions, vehicle);
             }
         }
 
@@ -182,7 +153,7 @@ namespace Ex03.ConsoleUI
             }
             while (valid == true && carSituation > 0 && carSituation < 5);
 
-            List<string> LicensesList= Garage.ShowVehiclesInSituation(carSituation);
+            List<string> LicensesList= garage.ShowVehiclesInSituation(carSituation);
 
             foreach(string LicenseNumber in LicensesList)
             {
@@ -205,7 +176,7 @@ namespace Ex03.ConsoleUI
             }
             while (valid == false && (situation < 1 || situation > 3));
 
-            Garage.ChangeCarSituation(licenseNumber, situation);
+            garage.ChangeCarSituation(licenseNumber, situation);
         }
 
         public static void FilVehicleWheelsAirToMax()
@@ -216,7 +187,7 @@ namespace Ex03.ConsoleUI
             {
                 Console.WriteLine("Please enter license number to fill Air in the wheels: ");
                 userInput = Console.ReadLine();
-                valid = Garage.FillAirInVehicle(userInput);
+                valid = garage.FillAirInVehicle(userInput);
             }
             while (valid == false);
         }
@@ -238,7 +209,7 @@ namespace Ex03.ConsoleUI
                 valid = Int32.TryParse(fuelType, out fuel);
                 if(valid == true)
                 {
-                    valid = Garage.FillUpTank(userInput, fuel, amount);
+                    valid = garage.FillUpTank(userInput, fuel, amount);
                 }
             }
             while (valid == false );
@@ -259,7 +230,7 @@ namespace Ex03.ConsoleUI
                 valid = Int32.TryParse(userInput, out amount);
                 if (valid == true)
                 {
-                    valid = Garage.ChargeBattery(licenseNumber, amount);
+                    valid = garage.ChargeBattery(licenseNumber, amount);
                 }
             }
             while (valid == false);
@@ -274,7 +245,7 @@ namespace Ex03.ConsoleUI
             {
                 Console.WriteLine("Please enter The license number of which vehicle information you want to see: ");
                 licenseNumber = Console.ReadLine();
-                valid = Garage.ShowVehicleInfo(licenseNumber);
+                valid = garage.ShowVehicleInfo(licenseNumber);
             }
             while (valid == false);
         }

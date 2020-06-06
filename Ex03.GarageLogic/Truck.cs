@@ -48,17 +48,17 @@ namespace Ex03.GarageLogic
 
             return requiredInfo;
         }
-        public List<string> ShowInfo()
-        {
-            List<string> vehicleInfo = Vehicle.ShowInfo();
+        //public List<string> ShowInfo()
+        //{
+        //    List<string> vehicleInfo = Vehicle.ShowInfo();
 
-            vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
-            vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
-            vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
-            vehicleInfo.Add("Is carrying dangerous goods: " + m_CarryingDangerousGoods.ToString());
-            vehicleInfo.Add("Cargo capacity: " + m_CargoCapacity.ToString());
+        //    vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
+        //    vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
+        //    vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
+        //    vehicleInfo.Add("Is carrying dangerous goods: " + m_CarryingDangerousGoods.ToString());
+        //    vehicleInfo.Add("Cargo capacity: " + m_CargoCapacity.ToString());
 
-            return vehicleInfo;
-        }
+        //    return vehicleInfo;
+        //}
     }
 }
