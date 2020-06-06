@@ -52,6 +52,20 @@ namespace Ex03.GarageLogic
                 return m_EngineType;
             }
         }
+        public string EngineTypestring
+        {
+            get
+            {
+                if(m_EngineType == (eEngineType)1)
+                {
+                    return "Electric";
+                }
+                else
+                {
+                    return "Fuel";
+                }
+            }
+        }
 
         public static List<string> RequiredInfoForCreation()
         {

@@ -25,8 +25,8 @@ namespace Ex03.GarageLogic
         private eCarColor m_CarColor;
         private eDoorsAmount m_DoorsAmount;
 
-        public Car(string i_ModelName, string i_LicenseNumber, Engine i_Engine, string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount) 
-            : base(i_ModelName, i_LicenseNumber, i_Engine, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)  
+        public Car(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount) 
+            : base(i_ModelName, i_LicenseNumber, i_EngineType, i_FuelType, i_RemainingEnergySource, i_MaximumEnergySourceCapacity, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)  
         {
             m_CarColor = i_CarColor;
             m_DoorsAmount = i_DoorsAmount;
@@ -59,6 +59,26 @@ namespace Ex03.GarageLogic
             requiredInfo.Add("Please choose DOORS AMOUNT:\n" + Garage.GetEnumOptions(typeof(eDoorsAmount)));
 
             return requiredInfo;
+        }
+        public List<string> ShowInfo()
+        {
+            List<string> vehicleInfo = Vehicle.ShowInfo();
+            if (m_ElectricEngine == null)
+            {
+                vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
+                vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
+                vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
+            }
+            else
+            {
+                vehicleInfo.Add("Engine type: " + m_ElectricEngine.EngineTypestring);
+                vehicleInfo.Add("Remaining source energy: " + m_ElectricEngine.RemainingEnergySource.ToString());
+                vehicleInfo.Add("Maximum source energy: " + m_ElectricEngine.MaximumEnergySourceCapacity.ToString());
+            }
+            vehicleInfo.Add("Car color: " + m_CarColor.ToString());
+            vehicleInfo.Add("Doors amount: " + m_DoorsAmount.ToString());
+
+            return vehicleInfo;
         }
     }
 }

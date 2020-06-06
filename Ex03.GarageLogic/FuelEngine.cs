@@ -16,15 +16,29 @@ namespace Ex03.GarageLogic
 
         private eFuelType m_FuelType;
 
-        public FuelEngine(eFuelType i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity) 
-            : base(i_RemainingEnergySource, i_MaximumEnergySourceCapacity)
+        public FuelEngine(string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity) 
+            : base((Engine.eEngineType)2, i_RemainingEnergySource, i_MaximumEnergySourceCapacity)
         {
-            m_FuelType = i_FuelType;
             m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
             m_RemainingEnergySource = i_RemainingEnergySource;
+            switch(i_FuelType)
+            {
+                case "Soler":
+                    m_FuelType = (eFuelType)1;
+                    break;
+                case "Octan95":
+                    m_FuelType = (eFuelType)2;
+                    break;
+                case "Octan96":
+                    m_FuelType = (eFuelType)3;
+                    break;
+                case "Octan98":
+                    m_FuelType = (eFuelType)4;
+                    break;
+            }
         }
 
-        public void Refuel(float i_LitersToAdd, eFuelType i_FuelType)
+        public void Refuel(int i_LitersToAdd, eFuelType i_FuelType)
         {
             if(i_LitersToAdd + m_RemainingEnergySource > m_MaximumEnergySourceCapacity)
             {
@@ -50,6 +64,13 @@ namespace Ex03.GarageLogic
 
             return result;
         }
+        public eEngineType EngineType
+        {
+            get
+            {
+                return m_EngineType;
+            }
+        }
 
         public eFuelType FuelType
         {
@@ -62,7 +83,7 @@ namespace Ex03.GarageLogic
         public static List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = Engine.RequiredInfoForCreation();
-            requiredInfo.Add("Please enter FUEL TYPE:\n" + Garage.GetEnumOptions(typeof(eEngineType)));
+            requiredInfo.Add("Please enter FUEL TYPE:\n" + Garage.GetEnumOptions(typeof(eEngineType)) + "\nOr none if electric");
 
             return requiredInfo;
         }

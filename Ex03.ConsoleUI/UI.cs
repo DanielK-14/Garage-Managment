@@ -5,7 +5,7 @@ using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
-    class UI
+    public class UI
     {
 
         Garage garage = new Garage();
@@ -63,7 +63,7 @@ namespace Ex03.ConsoleUI
                 try
                 {
                     Console.Clear();
-                    showActionsMenu();
+                    Console.WriteLine(k_MainMenuText);
                     userInput = Console.ReadLine();
                     do
                     {
@@ -72,7 +72,7 @@ namespace Ex03.ConsoleUI
                     while (valid == false);
                     handleUserSelection(userMenuSelection);
                 }
-                catch ()
+                catch (Exception ex)
                 {
                     Console.WriteLine("Error...");
                 }
@@ -81,7 +81,7 @@ namespace Ex03.ConsoleUI
                 Console.ReadLine();
             }
         }
-        private static void handleUserSelection(int i_UserChoose, string i_LicenseNumber)
+        private static void handleUserSelection(int i_UserChoose)
         {
             switch (i_UserChoose)
             {
@@ -95,18 +95,20 @@ namespace Ex03.ConsoleUI
                     ChangeVehicleStatues();
                     break;
                 case 4:
-                    FilVehicleWheelsAirToMax(i_LicenseNumber);
+                    FilVehicleWheelsAirToMax();
                     break;
                 case 5:
-                    FuelUpTank(i_LicenseNumber, eFuelType i_FuelType, i_AmountOfFuel);
+                    FuelUpTank();
                     break;
                 case 6:
-                    ChargeElectricVehicle(i_LicenseNumber, i_amountOfMinutesToCharge);
+                    ChargeElectricVehicle();
                     break;
                 case 7:
-                    ShowFullInfo(i_LicenseNumber);
+                    ShowFullInfo();
+                    break;
                 case 8:
                     s_ExitProgram = true;
+                    break;
                 default:
                     break;
             }
@@ -203,10 +205,10 @@ namespace Ex03.ConsoleUI
             }
             while (valid == false && (situation < 1 || situation > 3));
 
-            GarageLogic.ChangeCarSituation(licenseNumber, situation);
+            Garage.ChangeCarSituation(licenseNumber, situation);
         }
 
-        public static void FilVehicleWheelsAirToMax(string i_LicenseNumber)
+        public static void FilVehicleWheelsAirToMax()
         {
             bool valid = false;
             string userInput;
@@ -234,33 +236,47 @@ namespace Ex03.ConsoleUI
                 Console.WriteLine("How much fuel do you want? ");
                 amount = Console.ReadLine();
                 valid = Int32.TryParse(fuelType, out fuel);
-                valid = Garage.FillUpTank(userInput, fuel, amount);
+                if(valid == true)
+                {
+                    valid = Garage.FillUpTank(userInput, fuel, amount);
+                }
             }
             while (valid == false );
         }
 
-        public static void ChargeElectricVehicle(string i_LicenseNumber, int i_amountOfMinutesToCharge)
+        public static void ChargeElectricVehicle()
         {
-            if (GarageLogic.IsElectricVehicleExists(i_LicenseNumber) == true)
+            bool valid = false;
+            int amount;
+            string userInput, licenseNumber;
+
+            do
             {
-                GarageLogic.FillUpBattery(i_LicenseNumber, i_amountOfMinutesToCharge);
+                Console.WriteLine("Please enter license number to charge up battery: ");
+                licenseNumber = Console.ReadLine();
+                Console.WriteLine("How much to charge the battery?  ");
+                userInput = Console.ReadLine();
+                valid = Int32.TryParse(userInput, out amount);
+                if (valid == true)
+                {
+                    valid = Garage.ChargeBattery(licenseNumber, amount);
+                }
             }
-            else
-            {
-                Console.WriteLine("License number with that fuel type does not exist");
-            }
+            while (valid == false);
         }
 
-        public static void ShowFullInfo(string i_LicenseNumber)
+        public static void ShowFullInfo()
         {
-            if(GarageLogic.IsLicensenumberExist(i_LicenseNumber) == true)
+            bool valid = false;
+            string licenseNumber;
+
+            do
             {
-                GarageLogic.ShowAllInfo(i_LicenseNumber);
+                Console.WriteLine("Please enter The license number of which vehicle information you want to see: ");
+                licenseNumber = Console.ReadLine();
+                valid = Garage.ShowVehicleInfo(licenseNumber);
             }
-            else
-            {
-                Console.WriteLine("The License number does not exist..");
-            }
+            while (valid == false);
         }
     }
 }

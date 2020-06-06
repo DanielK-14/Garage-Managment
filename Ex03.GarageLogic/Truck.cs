@@ -9,8 +9,8 @@ namespace Ex03.GarageLogic
         private bool m_CarryingDangerousGoods;
         private float m_CargoCapacity;
 
-        public Truck(string i_ModelName, string i_LicenseNumber, Engine i_Engine, string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, bool i_CarryingDangerousGoods, float i_CargoCapacity)
-            : base(i_ModelName, i_LicenseNumber, i_Engine, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
+        public Truck(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, bool i_CarryingDangerousGoods, float i_CargoCapacity)
+            : base(i_ModelName, i_LicenseNumber, i_EngineType, i_FuelType, i_RemainingEnergySource, i_MaximumEnergySourceCapacity, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
         {
             m_CarryingDangerousGoods = i_CarryingDangerousGoods;
             m_CargoCapacity = i_CargoCapacity;
@@ -47,6 +47,18 @@ namespace Ex03.GarageLogic
             requiredInfo.Add("Please enter truck's CARGO CPACITY:");
 
             return requiredInfo;
+        }
+        public List<string> ShowInfo()
+        {
+            List<string> vehicleInfo = Vehicle.ShowInfo();
+
+            vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
+            vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
+            vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
+            vehicleInfo.Add("Is carrying dangerous goods: " + m_CarryingDangerousGoods.ToString());
+            vehicleInfo.Add("Cargo capacity: " + m_CargoCapacity.ToString());
+
+            return vehicleInfo;
         }
     }
 }
