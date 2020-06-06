@@ -108,14 +108,14 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException("Engine type is unknown");
             }
         }
-        public static virtual List<string> ShowInfo()
+        public virtual List<string> ShowInfo()
         {
             List<string> vehicleInfo = new List<string>();
-            vehicleInfo.Add("ModelName: " + m_ModelName);
-            vehicleInfo.Add("License Number: " + m_LicenseNumber);
-            vehicleInfo.Add("Wheels manufacturer: " + m_Wheels[1].ManufacturerName);
-            vehicleInfo.Add("Wheels current air: " + m_Wheels[1].CurrentAirPressure.ToString());
-            vehicleInfo.Add("Wheels max air pressure: " + m_Wheels[1].MaximumAirPressure.ToString());
+            //vehicleInfo.Add("ModelName: " + m_ModelName);
+            //vehicleInfo.Add("License Number: " + m_LicenseNumber);
+            //vehicleInfo.Add("Wheels manufacturer: " + m_Wheels[1].ManufacturerName);
+            //vehicleInfo.Add("Wheels current air: " + m_Wheels[1].CurrentAirPressure.ToString());
+            //vehicleInfo.Add("Wheels max air pressure: " + m_Wheels[1].MaximumAirPressure.ToString());
 
             return vehicleInfo;
         }

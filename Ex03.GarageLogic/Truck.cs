@@ -50,8 +50,13 @@ namespace Ex03.GarageLogic
         }
         public override List<string> ShowInfo()
         {
-            List<string> vehicleInfo = Vehicle.ShowInfo();
-
+            //List<string> vehicleInfo = Vehicle.ShowInfo();
+            List<string> vehicleInfo = new List<string>();
+            vehicleInfo.Add("ModelName: " + m_ModelName);
+            vehicleInfo.Add("License Number: " + m_LicenseNumber);
+            vehicleInfo.Add("Wheels manufacturer: " + m_Wheels[1].ManufacturerName);
+            vehicleInfo.Add("Wheels current air: " + m_Wheels[1].CurrentAirPressure.ToString());
+            vehicleInfo.Add("Wheels max air pressure: " + m_Wheels[1].MaximumAirPressure.ToString());
             vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
             vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
             vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
