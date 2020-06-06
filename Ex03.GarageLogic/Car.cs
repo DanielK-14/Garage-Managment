@@ -60,25 +60,25 @@ namespace Ex03.GarageLogic
 
             return requiredInfo;
         }
-        //public List<string> ShowInfo()
-        //{
-        //    List<string> vehicleInfo = Vehicle.ShowInfo();
-        //    if (m_ElectricEngine == null)
-        //    {
-        //        vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
-        //        vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
-        //        vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
-        //    }
-        //    else
-        //    {
-        //        vehicleInfo.Add("Engine type: " + m_ElectricEngine.EngineTypestring);
-        //        vehicleInfo.Add("Remaining source energy: " + m_ElectricEngine.RemainingEnergySource.ToString());
-        //        vehicleInfo.Add("Maximum source energy: " + m_ElectricEngine.MaximumEnergySourceCapacity.ToString());
-        //    }
-        //    vehicleInfo.Add("Car color: " + m_CarColor.ToString());
-        //    vehicleInfo.Add("Doors amount: " + m_DoorsAmount.ToString());
+        public override List<string> ShowInfo()
+        {
+            List<string> vehicleInfo = Vehicle.ShowInfo();
+            if (m_ElectricEngine == null)
+            {
+                vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
+                vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
+                vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
+            }
+            else
+            {
+                vehicleInfo.Add("Engine type: " + m_ElectricEngine.EngineTypestring);
+                vehicleInfo.Add("Remaining source energy: " + m_ElectricEngine.RemainingEnergySource.ToString());
+                vehicleInfo.Add("Maximum source energy: " + m_ElectricEngine.MaximumEnergySourceCapacity.ToString());
+            }
+            vehicleInfo.Add("Car color: " + m_CarColor.ToString());
+            vehicleInfo.Add("Doors amount: " + m_DoorsAmount.ToString());
 
-        //    return vehicleInfo;
-        //}
+            return vehicleInfo;
+        }
     }
 }

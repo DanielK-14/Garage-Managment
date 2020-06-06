@@ -108,7 +108,7 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException("Engine type is unknown");
             }
         }
-        public List<string> ShowInfo()
+        public static virtual List<string> ShowInfo()
         {
             List<string> vehicleInfo = new List<string>();
             vehicleInfo.Add("ModelName: " + m_ModelName);
