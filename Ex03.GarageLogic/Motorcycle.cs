@@ -18,10 +18,11 @@ namespace Ex03.GarageLogic
         private eLicenseType m_LicenseType;
         private int m_EngineCapacity;
 
-        public Motorcycle(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity
-            , string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, eLicenseType i_LicenseType, int i_EngineCapacity) 
-            : base(i_ModelName, i_LicenseNumber, i_EngineType, i_FuelType, i_RemainingEnergySource, i_MaximumEnergySourceCapacity
-                  , i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
+        public Motorcycle(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, 
+            float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName, float i_CurrentAirPressure, 
+            float i_MaximumAirPressure, int i_WheelsAmount, eLicenseType i_LicenseType, int i_EngineCapacity)
+            : base(i_LicenseNumber, i_ModelName, i_EngineType, i_FuelType, i_RemainingEnergySource,
+                  i_MaximumEnergySourceCapacity, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
         {
             m_LicenseType = i_LicenseType;
             m_EngineCapacity = i_EngineCapacity;
@@ -38,15 +39,15 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                if(LicenseType == (eLicenseType)1)
+                if(LicenseType == eLicenseType.A)
                 {
                     return "A";
                 }
-                else if (LicenseType == (eLicenseType)2)
+                else if (LicenseType == eLicenseType.A1)
                 {
                     return "A1";
                 }
-                else if (LicenseType == (eLicenseType)3)
+                else if (LicenseType == eLicenseType.AA)
                 {
                     return "AA";
                 }

@@ -9,8 +9,11 @@ namespace Ex03.GarageLogic
         private bool m_CarryingDangerousGoods;
         private float m_CargoCapacity;
 
-        public Truck(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, bool i_CarryingDangerousGoods, float i_CargoCapacity)
-            : base(i_ModelName, i_LicenseNumber, i_EngineType, i_FuelType, i_RemainingEnergySource, i_MaximumEnergySourceCapacity, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
+        public Truck(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, 
+            float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName, 
+            float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, bool i_CarryingDangerousGoods, float i_CargoCapacity)
+            : base(i_LicenseNumber, i_ModelName, i_EngineType, i_FuelType, i_RemainingEnergySource,
+                  i_MaximumEnergySourceCapacity, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
         {
             m_CarryingDangerousGoods = i_CarryingDangerousGoods;
             m_CargoCapacity = i_CargoCapacity;

@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
 {
     public class UI
     {
-
-        private static Garage garage = new Garage();
+        private static Garage m_Garage = new Garage();
 
         private const string k_MainMenuText =
      @"Please choose from the following options (1-8):
-        1. Add a new vehicle to garage.
-        2. Display license plate numbers for all vehicles in the garage.
-        3. Modify a vehicle's status.
-        4. Inflate a vehicle's wheels to maximum.
-        5. Refuel a gasoline-powered vehicle.
-        6. Charge an electric vehicle.
-        7. Display full details of a vehicle.
-        8. Quit.
-        ";
+1. Add a new vehicle to garage.
+2. Display license plate numbers for all vehicles in the garage.
+3. Modify a vehicle's status.
+4. Inflate a vehicle's wheels to maximum.
+5. Refuel a gasoline-powered vehicle.
+6. Charge an electric vehicle.
+7. Display full details of a vehicle.
+8. Quit.
+";
 
         static bool s_ExitProgram = false;
 
@@ -28,7 +26,7 @@ namespace Ex03.ConsoleUI
         {
             int userMenuSelection;
             string userInput;
-            bool valid = false;
+            bool valid;
             
             while (!s_ExitProgram)
             {
@@ -42,18 +40,15 @@ namespace Ex03.ConsoleUI
                         valid = Int32.TryParse(userInput, out userMenuSelection);
                     }
                     while (valid == false);
-                    handleUserSelection(userMenuSelection);
+                    IsUserSelectionOnManuValid(userMenuSelection);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error...");
+                    Console.WriteLine(ex.Message);
                 }
-
-                Console.WriteLine("Press any key to continue.");
-                Console.ReadLine();
             }
         }
-        private static void handleUserSelection(int i_UserChoose)
+        private static void IsUserSelectionOnManuValid(int i_UserChoose)
         {
             switch (i_UserChoose)
             {
@@ -82,61 +77,62 @@ namespace Ex03.ConsoleUI
                     s_ExitProgram = true;
                     break;
                 default:
-                    break;
+                    throw new ValueOutOfRangeException();
             }
 
         }
 
         public static void AddNewVehicleToGarage()
         {
-            int vehicle, amountOfGoodInstructions = 0, maxInstructionsForVehicle = 0;
-            bool valid = false, succesRequest = false;
-            string input;
-            List<string> info;
+            int vehicleTypeNumber, amountOfValidInstructions = 0, maxInstructionsForVehicle;
+            bool valid, succesRequest, isFuelEngine = false;
+            List<string> requiredInfo;
             List<string> buildInstructions = new List<string>();
-            string vehicleChoose = string.Empty;
-            string vehicleInfo = string.Empty;
-            string licenseNumber;
-            string Request;
-
+            string licenseNumber, userVehicleTypeInput, userInputInfoForVehicle;
+            float maximumPowerCapacity = 0, maximumAirPresure = 0;
 
             do
             {
                 Console.Clear();
-                Console.WriteLine("Please choose vehicle: (1)motorccycle (2)car (3)truck");
-                input = Console.ReadLine();
-                valid = garage.ValidVehicleType(input, out vehicle);
+                Console.WriteLine(m_Garage.GetGarageVehiclesTypes());
+                userVehicleTypeInput = Console.ReadLine();
+                valid = m_Garage.ValidVehicleType(userVehicleTypeInput, out vehicleTypeNumber);
             }
             while (valid == false);
 
 
-            Console.WriteLine("Please enter license number: ");
+            Console.WriteLine("Please enter LICENSE NUMBER: ");
             licenseNumber = Console.ReadLine();
-            if(garage.IsInGarage(licenseNumber) == true)
+            if(m_Garage.IsInGarage(licenseNumber) == true)
             {
-                garage.ChangeStatuesToInRepair(licenseNumber);
+                m_Garage.ChangeStatuesToInRepair(licenseNumber);
             }
             else
             {
-                info = garage.ChooseVehicleType(vehicle, out maxInstructionsForVehicle);
-                foreach(string instrucion in info)
+                buildInstructions.Add(licenseNumber);
+                amountOfValidInstructions++;
+                requiredInfo = m_Garage.ChooseVehicleType(vehicleTypeNumber, out maxInstructionsForVehicle);
+                foreach(string instrucion in requiredInfo)
                 {
                     do
                     {
                         Console.WriteLine(instrucion);
-                        Request = Console.ReadLine();
-                        succesRequest = garage.BuildNewVehicle(vehicle, Request, licenseNumber, amountOfGoodInstructions);
-                        if(succesRequest == true)
+
+                        userInputInfoForVehicle = Console.ReadLine();
+                        succesRequest = m_Garage.BuildNewVehicle(vehicleTypeNumber, userInputInfoForVehicle,
+                            amountOfValidInstructions, ref isFuelEngine, ref maximumPowerCapacity, ref maximumAirPresure);
+
+                        if (succesRequest == true)
                         {
-                            amountOfGoodInstructions++;
-                            buildInstructions.Add(Request);
+                            amountOfValidInstructions++;
+                            buildInstructions.Add(userInputInfoForVehicle);
                         }
                     }
                     while (succesRequest == false);
 
                     succesRequest = false;
                 }
-                garage.MakeVehicleAndPlaceInGarage(buildInstructions, vehicle);
+                m_Garage.MakeVehicleAndPlaceInGarage(buildInstructions, vehicleTypeNumber);
             }
         }
 
@@ -144,7 +140,7 @@ namespace Ex03.ConsoleUI
         {
             int carSituation;
             string userInput;
-            bool valid = false;
+            bool valid;
             do
             {
                 Console.WriteLine("Show vehicles in the situation (1)InReapair (2)Fixed (3)Paied (4)All: ");
@@ -153,7 +149,7 @@ namespace Ex03.ConsoleUI
             }
             while (valid == true && carSituation > 0 && carSituation < 5);
 
-            List<string> LicensesList= garage.ShowVehiclesInSituation(carSituation);
+            List<string> LicensesList= m_Garage.ShowVehiclesInSituation(carSituation);
 
             foreach(string LicenseNumber in LicensesList)
             {
@@ -165,7 +161,7 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber, userInput;
             int situation;
-            bool valid = false;
+            bool valid;
             do
             {
                 Console.WriteLine("Please enter license: ");
@@ -176,18 +172,18 @@ namespace Ex03.ConsoleUI
             }
             while (valid == false && (situation < 1 || situation > 3));
 
-            garage.ChangeCarSituation(licenseNumber, situation);
+            m_Garage.ChangeCarSituation(licenseNumber, situation);
         }
 
         public static void FilVehicleWheelsAirToMax()
         {
-            bool valid = false;
+            bool valid;
             string userInput;
             do
             {
                 Console.WriteLine("Please enter license number to fill Air in the wheels: ");
                 userInput = Console.ReadLine();
-                valid = garage.FillAirInVehicle(userInput);
+                valid = m_Garage.FillAirInVehicle(userInput);
             }
             while (valid == false);
         }
@@ -209,7 +205,7 @@ namespace Ex03.ConsoleUI
                 valid = Int32.TryParse(fuelType, out fuel);
                 if(valid == true)
                 {
-                    valid = garage.FillUpTank(userInput, fuel, amount);
+                    valid = m_Garage.FillUpTank(userInput, fuel, amount);
                 }
             }
             while (valid == false );
@@ -230,7 +226,7 @@ namespace Ex03.ConsoleUI
                 valid = Int32.TryParse(userInput, out amount);
                 if (valid == true)
                 {
-                    valid = garage.ChargeBattery(licenseNumber, amount);
+                    valid = m_Garage.ChargeBattery(licenseNumber, amount);
                 }
             }
             while (valid == false);
@@ -245,7 +241,7 @@ namespace Ex03.ConsoleUI
             {
                 Console.WriteLine("Please enter The license number of which vehicle information you want to see: ");
                 licenseNumber = Console.ReadLine();
-                valid = garage.ShowVehicleInfo(licenseNumber);
+                valid = m_Garage.ShowVehicleInfo(licenseNumber);
             }
             while (valid == false);
         }

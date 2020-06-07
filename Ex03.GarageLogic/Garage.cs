@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Text;
 
 namespace Ex03.GarageLogic
 {
@@ -61,63 +57,63 @@ namespace Ex03.GarageLogic
 
             return requiredInfo;
         }
-        public bool BuildNewVehicle(int i_Vehicle, string i_Request, string i_LicenseNumber, int i_CurrectInstructions)
+
+        public bool BuildNewVehicle(int i_VehicleType, string i_UserInput, int io_CurrectInstructions,
+            ref bool io_IsFuelEngine, ref float i_MaximumPowerCapacity, ref float io_MaximumAirPresure)
         {
             bool valid = false;
-            if (i_CurrectInstructions < 11)
+            if (io_CurrectInstructions < 10)
             {
-                switch (i_CurrectInstructions)
+                switch (io_CurrectInstructions)
                 {
                     case 1:
-                        valid = IsValidModelName(i_Request);
+                        valid = IsValidModelName(i_UserInput);
                         break;
                     case 2:
-                        valid = IsValidLicenseNumber(i_Request);
+                        valid = IsValidEngine(i_UserInput, ref io_IsFuelEngine);
                         break;
                     case 3:
-                        valid = IsValidEngine(i_Request);
+                        valid = IsValidMaximumPowerAmount(i_UserInput, i_VehicleType, ref i_MaximumPowerCapacity);
                         break;
                     case 4:
-                        IsValidRemainingPowerAmount(i_Request, i_Vehicle);
+                        valid = IsValidRemainingPowerAmount(i_UserInput, i_VehicleType, i_MaximumPowerCapacity);
                         break;
                     case 5:
-                        valid = IsValidMaximumPowerAmount(i_Request, i_Vehicle);
+                        valid = IsValidFuelType(i_UserInput, i_VehicleType);
                         break;
                     case 6:
-                        valid = IsValidFuelType(i_Request, i_Vehicle);
+                        valid = IsValidWheelsManufacturerName(i_UserInput);
                         break;
                     case 7:
-                        valid = IsValidWheelsManufacturerName(i_Request);
+                        valid = IsValidMaximumAirPressure(i_UserInput);
                         break;
                     case 8:
-                        valid = IsValidWheelsAirPressure(i_Request, i_Vehicle);
+                        valid = IsValidWheelsAirPressure(i_UserInput, ref io_MaximumAirPresure);
                         break;
                     case 9:
-                        IsValidMaximumAirPressure(i_Request, i_Vehicle);
-                        break;
-                    case 10:
-                        IsValidWheelsAmount(i_Request, i_Vehicle);
+                        valid = IsValidWheelsAmount(i_UserInput, i_VehicleType);
                         break;
                 }
             }
             else
             {
-                switch (i_Vehicle)
+                switch ((eVehicleType)i_VehicleType)
                 {
-                    case 1:
-                        valid = BuildNewMotorcycle(i_Request, i_CurrectInstructions - 10);
+                    case eVehicleType.Motorcycle:
+                        valid = BuildNewMotorcycle(i_UserInput, io_CurrectInstructions - 9);
                         break;
-                    case 2:
-                        valid = BuildNewCar(i_Request, i_CurrectInstructions - 10);
+                    case eVehicleType.Car:
+                        valid = BuildNewCar(i_UserInput, io_CurrectInstructions - 9);
                         break;
-                    case 3:
-                        valid = BuildNewTruck(i_Request, i_CurrectInstructions - 10);
+                    case eVehicleType.Truck:
+                        valid = BuildNewTruck(i_UserInput, io_CurrectInstructions - 9);
                         break;
                 }
             }
 
             return valid;
         }
+
         public bool BuildNewMotorcycle(string i_Request, int i_CurrectInstructions)
         {
             bool valid = false;
@@ -135,6 +131,7 @@ namespace Ex03.GarageLogic
             }
             return valid;
         }
+
         public bool BuildNewCar(string i_Request, int i_CurrectInstructions)
         {
             bool valid = false;
@@ -152,6 +149,7 @@ namespace Ex03.GarageLogic
             }
             return valid;
         }
+
         public bool BuildNewTruck(string i_Request, int i_CurrectInstructions)
         {
             bool valid = false;
@@ -169,6 +167,7 @@ namespace Ex03.GarageLogic
             }
             return valid;
         }
+
         public bool CheckIfLicenseIsValid(string i_LicenseNumber)
         {
             bool result = false;
@@ -182,6 +181,7 @@ namespace Ex03.GarageLogic
             }
             return result;
         }
+
         public List<string> ChooseVehicleType(int i_UserInput, out int io_MaxInstructions)
         {
             List<string> result;
@@ -231,46 +231,44 @@ namespace Ex03.GarageLogic
         {
             return true;
         }
+
         public bool IsValidLicenseNumber(string i_LicenseNumber)
         {
             return true;
         }
-        public bool IsValidEngine(string i_Engine)
+
+        public bool IsValidEngine(string i_Engine, ref bool io_IsFuelEngine)
         {
-            return Enum.IsDefined(typeof(Engine.eEngineType), i_Engine);
-        }
-        public bool IsValidRemainingPowerAmount(string i_RemainingPowerAmount, int i_VehicleTypre)
-        {
-            bool valid = false;
-            int remainingPowerAmount;
-            valid = int.TryParse(i_RemainingPowerAmount, out remainingPowerAmount);
-            if (valid == true)
+            int engineTypeNumber;
+            bool result = false;
+
+            if(Int32.TryParse(i_Engine, out engineTypeNumber) == true)
             {
-                switch (i_VehicleTypre)
+                Engine.eEngineType engineType = (Engine.eEngineType)engineTypeNumber;
+                result = Enum.IsDefined(typeof(Engine.eEngineType), engineType);
+                if(engineType == Engine.eEngineType.Fuel)
                 {
-                    case 1:
-                        if (remainingPowerAmount < 8 && remainingPowerAmount > 0)
-                        {
-                            valid = true;
-                        }
-                        break;
-                    case 2:
-                        if (remainingPowerAmount < 61 && remainingPowerAmount > 0)
-                        {
-                            valid = true;
-                        }
-                        break;
-                    case 3:
-                        if (remainingPowerAmount < 121 && remainingPowerAmount > 0)
-                        {
-                            valid = true;
-                        }
-                        break;
+                    io_IsFuelEngine = true;
                 }
+            }
+
+            return result;
+        }
+
+        public bool IsValidRemainingPowerAmount(string i_RemainingPowerAmount, int i_VehicleType, float i_MaximumPowerCapacity)
+        {
+            bool valid;
+            eVehicleType vehicleType = (eVehicleType)i_VehicleType;
+            float remainingPowerAmount;
+            valid = float.TryParse(i_RemainingPowerAmount, out remainingPowerAmount);
+            if (valid == true && (remainingPowerAmount < 0 || remainingPowerAmount > i_MaximumPowerCapacity))
+            {
+                valid = false;
             }
 
             return valid;
         }
+
         public void ChangeStatuesToInRepair(string i_License)
         {
             foreach(Vehicle vehicle in m_VehicleList)
@@ -281,38 +279,24 @@ namespace Ex03.GarageLogic
                 }
             }
         }
-        public bool IsValidMaximumPowerAmount(string i_MaximumPowerAmount, int i_VehicleTypre)
+
+        public bool IsValidMaximumPowerAmount(string i_MaximumPowerAmount, int i_VehicleTypre, ref float i_MaximumPowerCapacity)
         {
-            bool valid = false;
-            int maximumPowerAmount;
-            valid = int.TryParse(i_MaximumPowerAmount, out maximumPowerAmount);
-            if (valid == true)
+            bool valid;
+            float maximumPowerAmount;
+            valid = float.TryParse(i_MaximumPowerAmount, out maximumPowerAmount);
+            if (valid == true && maximumPowerAmount <= 0)
             {
-                switch(i_VehicleTypre)
-                {
-                    case 1:
-                        if(maximumPowerAmount == 7)
-                        {
-                            valid = true;
-                        }
-                        break;
-                    case 2:
-                        if (maximumPowerAmount == 60)
-                        {
-                            valid = true;
-                        }
-                        break;
-                    case 3:
-                        if (maximumPowerAmount == 120)
-                        {
-                            valid = true;
-                        }
-                        break;
-                }
+                valid = false;
+            }
+            else
+            {
+                i_MaximumPowerCapacity = maximumPowerAmount;
             }
 
             return valid;
         }
+
         public bool IsValidFuelType(string i_Request, int i_Vehicle)
         {
             bool valid = false;
@@ -336,69 +320,63 @@ namespace Ex03.GarageLogic
             return true;
         }
 
-        public bool IsValidWheelsAirPressure(string i_WheelsAirPressure, int i_VehicleType)
+        public bool IsValidWheelsAirPressure(string i_WheelsAirPressure, ref float io_MaximumAirPressure)
         {
-            bool valid = false;
-            switch (i_VehicleType)
+            bool valid;
+            float currentAirPressure;
+            valid = float.TryParse(i_WheelsAirPressure, out currentAirPressure);
+            if (valid == true && (currentAirPressure < 0 || currentAirPressure > io_MaximumAirPressure))
             {
-                case 1:
-                    valid = IsValidMotorcycleWheelsAmount(i_WheelsAirPressure);
-                    break;
-                case 2:
-                    valid = IsValidCarWheelsAmount(i_WheelsAirPressure);
-                    break;
-                case 3:
-                    valid = IsValidTruckWheelsAmount(i_WheelsAirPressure);
-                    break;
+                valid = false;
             }
 
             return valid;
         }
-        public bool IsValidMaximumAirPressure(string i_MaximumAirPressure, int i_VehicleType)
+
+        public bool IsValidMaximumAirPressure(string i_MaximumAirPressure)
         {
-            bool valid = false;
-            switch (i_VehicleType)
+            bool valid;
+            float maxAirPressure;
+            valid = float.TryParse(i_MaximumAirPressure, out maxAirPressure);
+            if(valid == true && maxAirPressure <= 0)
             {
-                case 1:
-                    valid = IsValidMotorcycleMaximumAirPressure(i_MaximumAirPressure);
-                    break;
-                case 2:
-                    valid = IsValidCarMaximumAirPressure(i_MaximumAirPressure);
-                    break;
-                case 3:
-                    valid = IsValidTruckMaximumAirPressure(i_MaximumAirPressure);
-                    break;
+                valid = false;
             }
 
             return valid;
         }
+
         public bool IsValidWheelsAmount(string i_WheelsAmount, int i_VehicleType)
         {
             bool valid = false;
-            switch(i_VehicleType)
+            eVehicleType vehicleType = (eVehicleType)i_VehicleType;
+            switch(vehicleType)
             {
-                case 1:
+                case eVehicleType.Motorcycle:
                     valid = IsValidMotorcycleWheelsAmount(i_WheelsAmount);
                     break;
-                case 2:
+                case eVehicleType.Car:
                     valid = IsValidCarWheelsAmount(i_WheelsAmount);
                     break;
-                case 3:
+                case eVehicleType.Truck:
                     valid = IsValidTruckWheelsAmount(i_WheelsAmount);
                     break;
             }
 
             return valid;
         }
+
         public bool IsValidCarColor(string i_CarColor)
         {
             return Enum.IsDefined(typeof(Car.eCarColor), i_CarColor);
         }
+
         public bool IsValidDoorsAmount(string i_CarDoorsAmount)
         {
             return Enum.IsDefined(typeof(Car.eDoorsAmount), i_CarDoorsAmount);
 
         }
+
         public bool IsValidDangerousGoods(string i_DangerousGoods)
         {
             bool valid = false;
@@ -409,6 +387,7 @@ namespace Ex03.GarageLogic
 
             return valid;
         }
+
         public bool IsValidCargoCapacity(string i_CargoCapacity)
         {
             bool valid = true;
@@ -423,11 +402,12 @@ namespace Ex03.GarageLogic
             return valid;
 
         }
+
         public bool IsValidLicenseType(string i_LicenseType)
         {
             return Enum.IsDefined(typeof(Motorcycle.eLicenseType), i_LicenseType);
-
         }
+
         public bool IsValidEngineCapacity(string i_EngineCapacity)
         {
             bool valid = true;
@@ -455,6 +435,7 @@ namespace Ex03.GarageLogic
 
             return valid;
         }
+
         public bool IsInGarage(string i_License)
         {
             bool exist = false;
@@ -469,18 +450,20 @@ namespace Ex03.GarageLogic
 
             return exist;
         }
+
         public bool IsValidMotorcycleWheelsAmount(string i_WheelsAmount)
         {
-            bool valid = false;
+            bool valid;
             int wheelsAmount;
             valid = int.TryParse(i_WheelsAmount, out wheelsAmount);
-            if(valid != true || wheelsAmount != 2)
+            if(valid != true || (wheelsAmount != 2 && wheelsAmount != 3))
             {
                 valid = false;
             }
 
             return valid;
         }
+
         public bool IsValidCarWheelsAmount(string i_WheelsAmount)
         {
             bool valid = false;
@@ -493,73 +476,40 @@ namespace Ex03.GarageLogic
 
             return valid;
         }
+
         public bool IsValidTruckWheelsAmount(string i_WheelsAmount)
         {
-            bool valid = false;
+            bool valid;
             int wheelsAmount;
             valid = int.TryParse(i_WheelsAmount, out wheelsAmount);
-            if (valid != true || wheelsAmount != 16)
+            if (valid != true || wheelsAmount < 16)
             {
                 valid = false;
             }
 
             return valid;
         }
-        public bool IsValidMotorcycleMaximumAirPressure(string i_WheelsAmount)
-        {
-            bool valid = false;
-            int wheelsAmount;
-            valid = int.TryParse(i_WheelsAmount, out wheelsAmount);
-            if (valid != true || wheelsAmount != 30)
-            {
-                valid = false;
-            }
 
-            return valid;
-        }
-        public bool IsValidCarMaximumAirPressure(string i_WheelsAmount)
-        {
-            bool valid = false;
-            int wheelsAmount;
-            valid = int.TryParse(i_WheelsAmount, out wheelsAmount);
-            if (valid != true || wheelsAmount != 32)
-            {
-                valid = false;
-            }
-
-            return valid;
-        }
-        public bool IsValidTruckMaximumAirPressure(string i_WheelsAmount)
-        {
-            bool valid = false;
-            int wheelsAmount;
-            valid = int.TryParse(i_WheelsAmount, out wheelsAmount);
-            if (valid != true || wheelsAmount != 28)
-            {
-                valid = false;
-            }
-
-            return valid;
-        }
         public void MakeVehicleAndPlaceInGarage(List<string> i_BuildInstructions, int i_Vehicle)
         {
             bool valid = false;
             int type, color, doors;
+            eVehicleType vehicleType = (eVehicleType)i_Vehicle;
             
-            switch(i_Vehicle)
+            switch(vehicleType)
             {
-                case 1:
+                case eVehicleType.Motorcycle:
                         Int32.TryParse(i_BuildInstructions[10], out type);
                         Motorcycle motorecycle = new Motorcycle(i_BuildInstructions[0], i_BuildInstructions[1], (Engine.eEngineType)Int32.Parse(i_BuildInstructions[2]), i_BuildInstructions[3], float.Parse(i_BuildInstructions[4]), float.Parse(i_BuildInstructions[5]), i_BuildInstructions[6], float.Parse(i_BuildInstructions[7]), float.Parse(i_BuildInstructions[8]), Int32.Parse(i_BuildInstructions[9]), (Motorcycle.eLicenseType)type, Int32.Parse(i_BuildInstructions[11]));
                         m_VehicleList.Add(motorecycle);
                     break;
-                case 2:
+                case eVehicleType.Car:
                         Int32.TryParse(i_BuildInstructions[10], out color);
                         Int32.TryParse(i_BuildInstructions[11], out doors);
                         Car car = new Car(i_BuildInstructions[0], i_BuildInstructions[1], (Engine.eEngineType)Int32.Parse(i_BuildInstructions[2]), i_BuildInstructions[3], float.Parse(i_BuildInstructions[4]), float.Parse(i_BuildInstructions[5]), i_BuildInstructions[6], float.Parse(i_BuildInstructions[7]), float.Parse(i_BuildInstructions[8]), Int32.Parse(i_BuildInstructions[9]), (Car.eCarColor)color, (Car.eDoorsAmount)doors);
                         m_VehicleList.Add(car);
                     break;
-                case 3:
+                case eVehicleType.Truck:
                     if(i_BuildInstructions[10] == "true")
                     {
                         valid = true;
@@ -700,6 +650,13 @@ namespace Ex03.GarageLogic
             }
 
             return valid;
+        }
+
+        public string GetGarageVehiclesTypes()
+        {
+            string garageVehiclesTypesInfo = string.Empty;
+            garageVehiclesTypesInfo = "Please choose one of the vehicles we work with in our garage:\n" + GetEnumOptions(typeof(eVehicleType));
+            return garageVehiclesTypesInfo;
         }
     }
 }

@@ -19,12 +19,12 @@ namespace Ex03.GarageLogic
         protected readonly List<Wheel> m_Wheels;
         protected eVehicleStatus m_Status;
 
-        public Vehicle(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity
+        public Vehicle(string i_LicenseNumber, string i_ModelName, Engine.eEngineType i_EngineType, string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity
             , string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount)
         {
             m_ModelName = i_ModelName;
             m_LicenseNumber = i_LicenseNumber;
-            if(i_EngineType == (Engine.eEngineType)1)
+            if(i_EngineType == Engine.eEngineType.Electric)
             {
                 m_ElectricEngine = new ElectricEngine(i_RemainingEnergySource, i_MaximumEnergySourceCapacity);
                 m_FuelEngine = null;
@@ -37,7 +37,7 @@ namespace Ex03.GarageLogic
             m_Wheels = new List<Wheel>(i_WheelsAmount);
             for(int i = 0; i < i_WheelsAmount; i++)
             {
-                m_Wheels[i] = new Wheel(i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure);
+                m_Wheels[i] = new Wheel(i_ManufacturerName, i_MaximumAirPressure, i_CurrentAirPressure);
             }
             m_Status = eVehicleStatus.InRepair;
         }
@@ -121,12 +121,11 @@ namespace Ex03.GarageLogic
         }
         public static List<string> RequiredInfoForCreation()
         {
-            List<string> engineInformation = FuelEngine.RequiredInfoForCreation();
-            List<string> wheelsInformation = Engine.RequiredInfoForCreation();
+            List<string> engineInformation = Engine.RequiredInfoForCreation();
+            List<string> wheelsInformation = Wheel.RequiredInfoForCreation();
             List<string> requiredInfo = new List<string>();
 
             requiredInfo.Add("Please enter vehicle MODEL NAME:");
-            requiredInfo.Add("Please enter LICENSE NUMBER:");
             foreach(string info in engineInformation)
             {
                 requiredInfo.Add(info);
@@ -169,7 +168,7 @@ namespace Ex03.GarageLogic
             private float m_CurrentAirPressure;
             private float m_MaximumAirPressure;
 
-            public Wheel(string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure)
+            public Wheel(string i_ManufacturerName, float i_MaximumAirPressure, float i_CurrentAirPressure)
             {
                 m_ManufacturerName = i_ManufacturerName;
                 m_CurrentAirPressure = i_CurrentAirPressure;
@@ -222,8 +221,8 @@ namespace Ex03.GarageLogic
                 List<string> requiredInfo = new List<string>();
 
                 requiredInfo.Add("Please enter WHEEL'S MANUFACTURER NAME:");
-                requiredInfo.Add("Please enter current WHEEL'S AIR PRESSURE:");
                 requiredInfo.Add("Please enter WHEEL'S MAXIMUM AIR PRESSURE:");
+                requiredInfo.Add("Please enter current WHEEL'S AIR PRESSURE:");
 
                 return requiredInfo;
             }

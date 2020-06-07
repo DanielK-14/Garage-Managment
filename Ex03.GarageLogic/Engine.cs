@@ -71,8 +71,8 @@ namespace Ex03.GarageLogic
         {
             List<string> requiredInfo = new List<string>();
             requiredInfo.Add("Please choose engine POWER SOURCE:\n" + Garage.GetEnumOptions(typeof(eEngineType)));
-            requiredInfo.Add("Please enter REMAINING POWER AMOUNT:");
             requiredInfo.Add("Please enter MAXIMUM POWER AMOUNT:");
+            requiredInfo.Add("Please enter REMAINING POWER AMOUNT:");
 
             return requiredInfo;
         }
