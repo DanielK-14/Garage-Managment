@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Ex03.GarageLogic;
 
 namespace Ex03.ConsoleUI
@@ -22,17 +23,17 @@ namespace Ex03.ConsoleUI
 
         static bool s_ExitProgram = false;
 
-        public static void start()
+        public static void Start()
         {
             int userMenuSelection;
             string userInput;
             bool valid;
             
-            while (!s_ExitProgram)
+            while (s_ExitProgram == false)
             {
+                Console.Clear();
                 try
                 {
-                    Console.Clear();
                     Console.WriteLine(k_MainMenuText);
                     userInput = Console.ReadLine();
                     do
@@ -40,208 +41,385 @@ namespace Ex03.ConsoleUI
                         valid = Int32.TryParse(userInput, out userMenuSelection);
                     }
                     while (valid == false);
-                    IsUserSelectionOnManuValid(userMenuSelection);
+                    userSelectionOnManu(userMenuSelection);
                 }
                 catch (Exception ex)
                 {
+                    Console.Clear();
                     Console.WriteLine(ex.Message);
                 }
             }
         }
-        private static void IsUserSelectionOnManuValid(int i_UserChoose)
+
+        private static void userSelectionOnManu(int i_UserChoose)
         {
+            Console.Clear();
             switch (i_UserChoose)
             {
                 case 1:
-                    AddNewVehicleToGarage();
+                    addNewVehicleToGarage();
                     break;
                 case 2:
-                    ShowLicenseNumbers();
+                    showLicenseNumbersInStatus();
+                    Thread.Sleep(3000);
                     break;
                 case 3:
-                    ChangeVehicleStatues();
+                    changeVehicleStatuses();
                     break;
                 case 4:
-                    FilVehicleWheelsAirToMax();
+                    filVehicleWheelsAirToMax();
                     break;
                 case 5:
-                    FuelUpTank();
+                    refuelVehicle();
                     break;
                 case 6:
-                    ChargeElectricVehicle();
+                    chargeElectricVehicle();
                     break;
                 case 7:
-                    ShowFullInfo();
+                    showFullInfo();
+                    Thread.Sleep(5000);
                     break;
                 case 8:
                     s_ExitProgram = true;
                     break;
                 default:
-                    throw new ValueOutOfRangeException();
+                    throw new ValueOutOfRangeException(8, 1);
             }
 
         }
 
-        public static void AddNewVehicleToGarage()
+        private static void addNewVehicleToGarage()
         {
-            int vehicleTypeNumber, amountOfValidInstructions = 0, maxInstructionsForVehicle;
-            bool valid, succesRequest, isFuelEngine = false;
-            List<string> requiredInfo;
-            List<string> buildInstructions = new List<string>();
-            string licenseNumber, userVehicleTypeInput, userInputInfoForVehicle;
-            float maximumPowerCapacity = 0, maximumAirPresure = 0;
+            List<string> infoRequiredForCreation;
+            string licenseNumber, vehicleTypeNumber, ownerName, phoneNumber;
+            object vehicle;
 
-            do
+            licenseNumber = getLicenseNumber();
+            if(m_Garage.IfLicenseNumberExsitsChangeStatusInRepair(licenseNumber) != true)
             {
-                Console.Clear();
-                Console.WriteLine(m_Garage.GetGarageVehiclesTypes());
-                userVehicleTypeInput = Console.ReadLine();
-                valid = m_Garage.ValidVehicleType(userVehicleTypeInput, out vehicleTypeNumber);
-            }
-            while (valid == false);
-
-
-            Console.WriteLine("Please enter LICENSE NUMBER: ");
-            licenseNumber = Console.ReadLine();
-            if(m_Garage.IsInGarage(licenseNumber) == true)
-            {
-                m_Garage.ChangeStatuesToInRepair(licenseNumber);
+                vehicleTypeNumber = getVehicleInfo();
+                vehicle = VehicleCreator.CreateVehicle(vehicleTypeNumber, licenseNumber);
+                infoRequiredForCreation = m_Garage.GetAllInformationRequiredForThisTypeOfVehicle(vehicleTypeNumber, vehicle);
+                getUserInputForCreationAndFillVehicleData(infoRequiredForCreation, vehicleTypeNumber, vehicle);
+                ownerName = getOwnerName();
+                phoneNumber = getPhoneNumber();
+                m_Garage.AddVehicleToGarage(licenseNumber, vehicle, ownerName, phoneNumber);
             }
             else
             {
-                buildInstructions.Add(licenseNumber);
-                amountOfValidInstructions++;
-                requiredInfo = m_Garage.ChooseVehicleType(vehicleTypeNumber, out maxInstructionsForVehicle);
-                foreach(string instrucion in requiredInfo)
+                Console.WriteLine("Vehicle already exists");
+            }
+        }
+
+        private static string getOwnerName()
+        {
+            Console.Clear();
+            bool valid;
+            string ownerName = string.Empty;
+
+            do
+            {
+                try
                 {
-                    do
-                    {
-                        Console.WriteLine(instrucion);
-
-                        userInputInfoForVehicle = Console.ReadLine();
-                        succesRequest = m_Garage.BuildNewVehicle(vehicleTypeNumber, userInputInfoForVehicle,
-                            amountOfValidInstructions, ref isFuelEngine, ref maximumPowerCapacity, ref maximumAirPresure);
-
-                        if (succesRequest == true)
-                        {
-                            amountOfValidInstructions++;
-                            buildInstructions.Add(userInputInfoForVehicle);
-                        }
-                    }
-                    while (succesRequest == false);
-
-                    succesRequest = false;
+                    Console.Write("Please enter vehicle's OWNER NAME: ");
+                    ownerName = Console.ReadLine();
+                    m_Garage.CheckOwnerName(ownerName);
+                    valid = true;
                 }
-                m_Garage.MakeVehicleAndPlaceInGarage(buildInstructions, vehicleTypeNumber);
+                catch (Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            while (valid == false);
+
+            return ownerName;
+        }
+
+        private static string getPhoneNumber()
+        {
+            Console.Clear();
+            bool valid;
+            string phoneNumber = string.Empty;
+
+            do
+            {
+                try
+                { 
+                    Console.Write("Please enter owner's PHONE NUMBER: ");
+                    phoneNumber = Console.ReadLine();
+                    m_Garage.CheckPhone(phoneNumber);
+                    valid = true;
+                }
+                catch (Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            while (valid == false);
+
+            return phoneNumber;
+        }
+
+        private static string getLicenseNumber()
+        {
+            Console.Clear();
+            bool valid;
+            string licenseNumber = string.Empty;
+            do
+            {
+                try
+                {
+                    Console.Write("Please enter LICENSE NUMBER: ");
+                    licenseNumber = Console.ReadLine();
+                    m_Garage.CheckIfLicenseIsValid(licenseNumber);
+                    valid = true;
+                }
+                catch (Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            while (valid == false);
+
+            return licenseNumber;
+        }
+
+        private static string getVehicleInfo()
+        {
+            Console.Clear();
+            bool valid;
+            string userVehicleTypeInput = string.Empty;
+            do
+            {
+                try
+                {
+                    Console.WriteLine(m_Garage.GetGarageVehiclesTypes());
+                    userVehicleTypeInput = Console.ReadLine();
+                    m_Garage.ValidVehicleType(userVehicleTypeInput);
+                    valid = true;
+                }
+                catch (Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            while (valid == false);
+
+            return userVehicleTypeInput;
+        }
+
+        private static void getUserInputForCreationAndFillVehicleData(List<string> i_InfoRequired, string i_VehicleType, object vehicle)
+        {
+            Console.Clear();
+            int requestNumber = 1;
+            string userInput;
+            bool validInput;
+
+            foreach(var request in i_InfoRequired)
+            {
+                Console.Clear();
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine(request);
+                        userInput = Console.ReadLine();
+                        m_Garage.CheckInputForCreation(userInput, requestNumber, i_VehicleType, vehicle);
+                        requestNumber++;
+                        validInput = true;
+
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.Clear();
+                        validInput = false;
+                        Console.WriteLine(ex.Message);
+                    }
+
+                } while (validInput == false);
             }
         }
 
-        public static void ShowLicenseNumbers()
+        private static void showLicenseNumbersInStatus()
         {
-            int carSituation;
+            Console.Clear();
             string userInput;
             bool valid;
+
             do
             {
-                Console.WriteLine("Show vehicles in the situation (1)InReapair (2)Fixed (3)Paied (4)All: ");
-                userInput = Console.ReadLine();
-                valid = int.TryParse(userInput, out carSituation);
-            }
-            while (valid == true && carSituation > 0 && carSituation < 5);
-
-            List<string> LicensesList= m_Garage.ShowVehiclesInSituation(carSituation);
-
-            foreach(string LicenseNumber in LicensesList)
-            {
-                Console.WriteLine(LicenseNumber);
-            }
-        }
-
-        public static void ChangeVehicleStatues()
-        {
-            string licenseNumber, userInput;
-            int situation;
-            bool valid;
-            do
-            {
-                Console.WriteLine("Please enter license: ");
-                licenseNumber = Console.ReadLine();
-                Console.WriteLine("Enter situation (1)InRepair (2)Fixed (3)Paied: ");
-                userInput = Console.ReadLine();
-                valid = Int32.TryParse(userInput, out situation);
-            }
-            while (valid == false && (situation < 1 || situation > 3));
-
-            m_Garage.ChangeCarSituation(licenseNumber, situation);
-        }
-
-        public static void FilVehicleWheelsAirToMax()
-        {
-            bool valid;
-            string userInput;
-            do
-            {
-                Console.WriteLine("Please enter license number to fill Air in the wheels: ");
-                userInput = Console.ReadLine();
-                valid = m_Garage.FillAirInVehicle(userInput);
+                try
+                {
+                    Console.WriteLine("Choose status for search : " + m_Garage.GetVehiclesPossibleStatusesInGarage());
+                    userInput = Console.ReadLine();
+                    m_Garage.CheckInputedStatus(userInput);
+                    valid = true;
+                    List<string> matchedLicenseNumbers = m_Garage.GetLicenseNumbersInStatus(userInput);
+                    foreach (string LicenseNumber in matchedLicenseNumbers)
+                    {
+                        Console.WriteLine(LicenseNumber);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
             }
             while (valid == false);
         }
 
-        public static void FuelUpTank()
+        private static void changeVehicleStatuses()
         {
-            bool valid = false;
-            int fuel;
-            string userInput, fuelType, amount;
+            Console.Clear();
+            string licenseNumber, statusInput;
+            bool valid;
+            do
+            {
+                try
+                {
+                    Console.Write("Please enter license number: ");
+                    licenseNumber = Console.ReadLine();
+                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+
+                    Console.WriteLine("Choose status to change to :" + m_Garage.GetVehiclesPossibleStatusesInGarage());
+                    statusInput = Console.ReadLine();
+                    m_Garage.CheckInputedStatus(statusInput);
+
+                    m_Garage.ChangeVehicleStatus(licenseNumber, statusInput);
+                    valid = true;
+                }
+                catch (Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            while (valid == false);
+        }
+
+        private static void filVehicleWheelsAirToMax()
+        {
+            Console.Clear();
+            bool valid;
+            string licenseNumber;
+            do
+            {
+                try
+                {
+                    Console.Write("Please enter license number to fill air-pressure wheels to maximum: ");
+                    licenseNumber = Console.ReadLine();
+                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+                    m_Garage.FillAirInVehicleWheelsToMax(licenseNumber);
+                    valid = true;
+                }
+                catch(Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            while (valid == false);
+        }
+
+        private static void refuelVehicle()
+        {
+            Console.Clear();
+            bool valid;
+            string licenseNumber, fuelType, fuelAmount;
 
             do
             {
-                Console.WriteLine("Please enter license number to fuel up tank: ");
-                userInput = Console.ReadLine();
-                Console.WriteLine("Chose fuel type (1)Soler (2)Octan95 (3)Octan96 (4)Octan98: ");
-                fuelType = Console.ReadLine();
-                Console.WriteLine("How much fuel do you want? ");
-                amount = Console.ReadLine();
-                valid = Int32.TryParse(fuelType, out fuel);
-                if(valid == true)
+                try
                 {
-                    valid = m_Garage.FillUpTank(userInput, fuel, amount);
+                    Console.WriteLine("Please enter license number to refuel up to full tank: ");
+                    licenseNumber = Console.ReadLine();
+                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+
+                    Console.WriteLine("Choose fuel type to fill :" + m_Garage.GetFuelTypes());
+                    fuelType = Console.ReadLine();
+                    m_Garage.CheckIfFuelTypeIsValid(fuelType);
+
+                    Console.WriteLine("How much fuel do you want? ");
+                    fuelAmount = Console.ReadLine();
+                    m_Garage.RefuelVehicle(licenseNumber, fuelType, fuelAmount);
+
+                    valid = true;
+                }
+                catch(Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
                 }
             }
             while (valid == false );
         }
 
-        public static void ChargeElectricVehicle()
+        private static void chargeElectricVehicle()
         {
-            bool valid = false;
-            int amount;
-            string userInput, licenseNumber;
+            Console.Clear();
+            bool valid;
+            string amountToCharge, licenseNumber;
 
             do
             {
-                Console.WriteLine("Please enter license number to charge up battery: ");
-                licenseNumber = Console.ReadLine();
-                Console.WriteLine("How much to charge the battery?  ");
-                userInput = Console.ReadLine();
-                valid = Int32.TryParse(userInput, out amount);
-                if (valid == true)
+                try
                 {
-                    valid = m_Garage.ChargeBattery(licenseNumber, amount);
+                    Console.WriteLine("Please enter license number to charge up battery: ");
+                    licenseNumber = Console.ReadLine();
+                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+
+                    Console.WriteLine("How much to charge the battery?  ");
+                    amountToCharge = Console.ReadLine();
+                    m_Garage.ChargeVehicle(licenseNumber, amountToCharge);
+
+                    valid = true;
+                }
+                catch(Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
                 }
             }
             while (valid == false);
         }
 
-        public static void ShowFullInfo()
+        private static void showFullInfo()
         {
-            bool valid = false;
+            Console.Clear();
+            bool valid;
             string licenseNumber;
 
             do
             {
-                Console.WriteLine("Please enter The license number of which vehicle information you want to see: ");
-                licenseNumber = Console.ReadLine();
-                valid = m_Garage.ShowVehicleInfo(licenseNumber);
+                try
+                {
+                    Console.WriteLine("Please enter The license number of which vehicle's information you want to see: ");
+                    licenseNumber = Console.ReadLine();
+                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+                    Console.WriteLine(m_Garage.GetVehicleInfo(licenseNumber));
+                    valid = true;
+                }
+                catch (Exception ex)
+                {
+                    valid = false;
+                    Console.Clear();
+                    Console.WriteLine(ex.Message);
+                }
             }
             while (valid == false);
         }

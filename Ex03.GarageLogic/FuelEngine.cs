@@ -14,43 +14,27 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
-        private eFuelType m_FuelType;
+        private readonly eFuelType m_FuelType;
 
-        public FuelEngine(string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity) 
-            : base((Engine.eEngineType)2, i_RemainingEnergySource, i_MaximumEnergySourceCapacity)
+        public FuelEngine(eFuelType i_FuelType, float i_MaximumEnergySourceCapacity) 
+            : base(Engine.eEngineType.Fuel, i_MaximumEnergySourceCapacity)
         {
-            m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
-            m_RemainingEnergySource = i_RemainingEnergySource;
-            switch(i_FuelType)
-            {
-                case "Soler":
-                    m_FuelType = (eFuelType)1;
-                    break;
-                case "Octan95":
-                    m_FuelType = (eFuelType)2;
-                    break;
-                case "Octan96":
-                    m_FuelType = (eFuelType)3;
-                    break;
-                case "Octan98":
-                    m_FuelType = (eFuelType)4;
-                    break;
-            }
+            m_FuelType = i_FuelType;
         }
 
-        public void Refuel(int i_LitersToAdd, eFuelType i_FuelType)
+        public void Refuel(float i_LitersToAdd, eFuelType i_FuelType)
         {
-            if(i_LitersToAdd + m_RemainingEnergySource > m_MaximumEnergySourceCapacity)
+            if(i_LitersToAdd + m_RemainingEnergy > m_MaximumCapacity)
             {
-                throw new ValueOutOfRangeException();       // Too much fuel //EXCEPTION to continue///
+                throw new ValueOutOfRangeException(m_MaximumCapacity, 0);
             }
             else if(this.isSameTypeOfFuel(i_FuelType) == false)
             {
-                throw new ArgumentException();              // Wrong type of fuel //EXCEPTION to continue///
+                throw new ArgumentException("Wrong type of fuel picked");
             }
             else
             {
-                m_RemainingEnergySource = m_RemainingEnergySource + i_LitersToAdd;
+                m_RemainingEnergy = m_RemainingEnergy + i_LitersToAdd;
             }
         }
 
@@ -64,13 +48,6 @@ namespace Ex03.GarageLogic
 
             return result;
         }
-        public eEngineType EngineType
-        {
-            get
-            {
-                return m_EngineType;
-            }
-        }
 
         public eFuelType FuelType
         {
@@ -80,12 +57,17 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public static List<string> RequiredInfoForCreation()
+        public override List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = Engine.RequiredInfoForCreation();
-            requiredInfo.Add("Please enter FUEL TYPE:\n" + Garage.GetEnumOptions(typeof(eFuelType)));
+            List<string> requiredInfo = new List<string>();
+            requiredInfo.Add(string.Format("Please enter FUEL AMOUNT LEFT (MAXIMUM: {0}): ", m_MaximumCapacity));
 
             return requiredInfo;
+        }
+
+        public void RefuelToFullTank()
+        {
+            Remaining = MaximumCapacity;
         }
     }
 }

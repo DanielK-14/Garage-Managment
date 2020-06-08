@@ -1,45 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Ex03.GarageLogic
 {
     abstract class Vehicle
     {
-        public enum eVehicleStatus
-        {
-            InRepair = 1,
-            Fixed,
-            Paied,
-        }
-
-        protected readonly string m_ModelName;
+        protected string m_ModelName;
         protected readonly string m_LicenseNumber;
-        protected readonly ElectricEngine m_ElectricEngine;
-        protected readonly FuelEngine m_FuelEngine;
-        protected readonly List<Wheel> m_Wheels;
-        protected eVehicleStatus m_Status;
+        protected readonly Engine m_Engine;
+        protected List<Wheel> m_Wheels;
 
-        public Vehicle(string i_LicenseNumber, string i_ModelName, Engine.eEngineType i_EngineType, string i_FuelType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity
-            , string i_ManufacturerName, float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount)
+        public Vehicle(string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels)
         {
-            m_ModelName = i_ModelName;
             m_LicenseNumber = i_LicenseNumber;
-            if(i_EngineType == Engine.eEngineType.Electric)
-            {
-                m_ElectricEngine = new ElectricEngine(i_RemainingEnergySource, i_MaximumEnergySourceCapacity);
-                m_FuelEngine = null;
-            }
-            else
-            {
-                m_FuelEngine = new FuelEngine(i_FuelType, i_RemainingEnergySource, i_MaximumEnergySourceCapacity);
-                m_ElectricEngine = null;
-            }
-            m_Wheels = new List<Wheel>(i_WheelsAmount);
-            for(int i = 0; i < i_WheelsAmount; i++)
-            {
-                m_Wheels[i] = new Wheel(i_ManufacturerName, i_MaximumAirPressure, i_CurrentAirPressure);
-            }
-            m_Status = eVehicleStatus.InRepair;
+            m_ModelName = string.Empty;
+            m_Engine = i_Engine;
+            m_Wheels = i_Wheels;
         }
 
         public string ModelName
@@ -47,6 +24,10 @@ namespace Ex03.GarageLogic
             get
             {
                 return m_ModelName;
+            }
+            set
+            {
+                m_ModelName = value;
             }
         }
 
@@ -58,20 +39,14 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public FuelEngine FuelEnergy
+        public Engine VehicleEngine
         {
             get
             {
-                return m_FuelEngine;
+                return m_Engine;
             }
         }
-        public ElectricEngine ElectricEnergy
-        {
-            get
-            {
-                return m_ElectricEngine;
-            }
-        }
+
         public List<Wheel> Wheels
         {
             get
@@ -80,53 +55,50 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public eVehicleStatus Status
+        public virtual StringBuilder ShowInfo()
         {
-            get
+            StringBuilder vehicleInfo = new StringBuilder();
+            vehicleInfo.AppendLine("ModelName: " + m_ModelName);
+            vehicleInfo.AppendLine("License Number: " + m_LicenseNumber);
+            vehicleInfo.AppendLine("Wheels manufacturer: " + m_Wheels[1].ManufacturerName);
+            vehicleInfo.AppendLine("Wheels current air: " + m_Wheels[1].CurrentAirPressure.ToString());
+            vehicleInfo.AppendLine("Wheels max air pressure: " + m_Wheels[1].MaximumAirPressure.ToString());
+            if (m_Engine is FuelEngine)
             {
-                return m_Status;
+                FuelEngine fuelEngine = m_Engine as FuelEngine;
+                vehicleInfo.AppendLine("Engine type: " + fuelEngine.EngineTypestring);
+                vehicleInfo.AppendLine("Fuel type: " + Enum.GetName(typeof(FuelEngine.eFuelType), fuelEngine.FuelType));
+                vehicleInfo.AppendLine("Remaining fuel amount: " + fuelEngine.Remaining.ToString());
+                vehicleInfo.AppendLine("Maximum fuel amount: " + fuelEngine.MaximumCapacity.ToString());
             }
-            set
+            else
             {
-                m_Status = value;
+                vehicleInfo.AppendLine("Engine type: " + m_Engine.EngineTypestring);
+                vehicleInfo.AppendLine("Remaining battery energy hours : " + m_Engine.Remaining.ToString());
+                vehicleInfo.AppendLine("Maximum battery energy in hours : " + m_Engine.MaximumCapacity.ToString());
             }
-        }
-
-        public virtual void FillEngineSourceUnit(int i_VehicleType, int i_AmountToInsert, int i_FuelType)
-        {
-            switch ((Engine.eEngineType)i_VehicleType)
-            {
-                case Engine.eEngineType.Electric:
-                    m_ElectricEngine.ReCharge(i_AmountToInsert);
-                    break;
-
-                case Engine.eEngineType.Fuel:
-                    m_FuelEngine.Refuel(i_AmountToInsert, (FuelEngine.eFuelType)i_FuelType);
-                    break;
-
-                default:
-                    throw new ArgumentException("Engine type is unknown");
-            }
-        }
-        public virtual List<string> ShowInfo()
-        {
-            List<string> vehicleInfo = new List<string>();
-            //vehicleInfo.Add("ModelName: " + m_ModelName);
-            //vehicleInfo.Add("License Number: " + m_LicenseNumber);
-            //vehicleInfo.Add("Wheels manufacturer: " + m_Wheels[1].ManufacturerName);
-            //vehicleInfo.Add("Wheels current air: " + m_Wheels[1].CurrentAirPressure.ToString());
-            //vehicleInfo.Add("Wheels max air pressure: " + m_Wheels[1].MaximumAirPressure.ToString());
 
             return vehicleInfo;
         }
-        public static List<string> RequiredInfoForCreation()
+        public virtual List<string> RequiredInfoForCreation()
         {
-            List<string> engineInformation = Engine.RequiredInfoForCreation();
-            List<string> wheelsInformation = Wheel.RequiredInfoForCreation();
+            List<string> engineInformation;
+            if (m_Engine is ElectricEngine)
+            {
+                ElectricEngine electricEngine = m_Engine as ElectricEngine;
+                engineInformation = electricEngine.RequiredInfoForCreation();
+            }
+            else
+            {
+                FuelEngine fuelEngine = m_Engine as FuelEngine;
+                engineInformation = fuelEngine.RequiredInfoForCreation();
+            }
+
+            List<string> wheelsInformation = m_Wheels[0].RequiredInfoForCreation();
             List<string> requiredInfo = new List<string>();
 
             requiredInfo.Add("Please enter vehicle MODEL NAME:");
-            foreach(string info in engineInformation)
+            foreach (string info in engineInformation)
             {
                 requiredInfo.Add(info);
             }
@@ -134,44 +106,73 @@ namespace Ex03.GarageLogic
             {
                 requiredInfo.Add(info);
             }
-            requiredInfo.Add("Please enter WHEELS AMOUNT:");
 
             return requiredInfo;
         }
-
-        //public static bool IsInfoInputValid(string i_Input, int i_ValueNumber)
-        //{
-        //    bool result;
-        //    switch(i_ValueNumber)
-        //    {
-        //        case 1:
-        //            break;
-        //        case 2:
-        //            break;
-        //        case 3:
-        //            break;
-        //        case 4:
-        //            break;
-        //    }
-
-        //    return result;
-        //}
 
         public override int GetHashCode()
         {
             return this.m_LicenseNumber.GetHashCode();
         }
 
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            if(obj != null)
+            {
+                if(obj is Vehicle)
+                {
+                    equals = this.GetHashCode() == ((Vehicle)obj).GetHashCode();
+                }
+            }
+
+            return equals;
+        }
+
+        public void SetAllWheelsManufacturerName(string i_ManufacturerName)
+        {
+            foreach(var wheel in m_Wheels)
+            {
+                wheel.ManufacturerName = i_ManufacturerName;
+            }
+        }
+
+        public void SetAllWheelsAirPressure(float i_AirPressure)
+        {
+            foreach (var wheel in m_Wheels)
+            {
+                wheel.CurrentAirPressure = i_AirPressure;
+            }
+        }
+
+        public void SetAllWheelsAirPressureToMax()
+        {
+            foreach(var wheel in m_Wheels)
+            {
+                wheel.AddAirTillMaxPressure();
+            }
+        }
+
+        public static List<Wheel> CreateWheelsForVehicle(int i_Amount, float i_MaxPressure)
+        {
+            List<Wheel> wheels = new List<Wheel>(i_Amount);
+            for (int i = 0; i < i_Amount; i++)
+            {
+                wheels.Add(new Wheel(i_MaxPressure));
+            }
+
+            return wheels;
+        }
+
         public class Wheel
         {
             private string m_ManufacturerName;
-            private float m_CurrentAirPressure;
-            private float m_MaximumAirPressure;
+            private float? m_CurrentAirPressure;
+            private readonly float m_MaximumAirPressure;
 
-            public Wheel(string i_ManufacturerName, float i_MaximumAirPressure, float i_CurrentAirPressure)
+            public Wheel(float i_MaximumAirPressure)
             {
-                m_ManufacturerName = i_ManufacturerName;
-                m_CurrentAirPressure = i_CurrentAirPressure;
                 m_MaximumAirPressure = i_MaximumAirPressure;
             }
 
@@ -181,13 +182,35 @@ namespace Ex03.GarageLogic
                 {
                     return m_ManufacturerName;
                 }
+                set
+                {
+                    m_ManufacturerName = value;
+                }
             }
 
             public float CurrentAirPressure
             {
                 get
                 {
-                    return m_CurrentAirPressure;
+                    if (m_CurrentAirPressure.HasValue == true)
+                    {
+                        return (float)m_CurrentAirPressure;
+                    }
+                    else
+                    {
+                        throw new FormatException("Value was not yet initialzed");
+                    }
+                }
+                set
+                {
+                    if(value > m_MaximumAirPressure || value < 0)
+                    {
+                        throw new ValueOutOfRangeException(m_MaximumAirPressure, 0);
+                    }
+                    else
+                    {
+                        m_CurrentAirPressure = value;
+                    }
                 }
             }
 
@@ -209,20 +232,22 @@ namespace Ex03.GarageLogic
 
             public void AddAirTillMaxPressure()
             {
-                float difference = m_MaximumAirPressure - m_CurrentAirPressure;
-                if (difference > 0)
+                if (m_CurrentAirPressure.HasValue == true)
                 {
-                    AddAirToWheel(difference);
+                    float difference = m_MaximumAirPressure - m_CurrentAirPressure.Value;
+                    if (difference > 0)
+                    {
+                        AddAirToWheel(difference);
+                    }
                 }
             }
 
-            public static List<string> RequiredInfoForCreation()
+            public virtual List<string> RequiredInfoForCreation()
             {
                 List<string> requiredInfo = new List<string>();
 
                 requiredInfo.Add("Please enter WHEEL'S MANUFACTURER NAME:");
-                requiredInfo.Add("Please enter WHEEL'S MAXIMUM AIR PRESSURE:");
-                requiredInfo.Add("Please enter current WHEEL'S AIR PRESSURE:");
+                requiredInfo.Add(string.Format("Please enter current WHEEL'S AIR PRESSURE (MAXIMUM: {0}):", m_MaximumAirPressure));
 
                 return requiredInfo;
             }

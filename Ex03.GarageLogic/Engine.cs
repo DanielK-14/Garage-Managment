@@ -11,37 +11,47 @@ namespace Ex03.GarageLogic
             Fuel,
         }
 
-        protected eEngineType m_EngineType;
-        protected float m_RemainingEnergySource;
-        protected float m_MaximumEnergySourceCapacity;
+        protected readonly eEngineType m_EngineType;
+        protected float? m_RemainingEnergy;
+        protected readonly float m_MaximumCapacity;
 
-        public Engine(eEngineType i_EngineType, float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity)
+        public Engine(eEngineType i_EngineType, float i_MaximumEnergySourceCapacity)
         {
             m_EngineType = i_EngineType;
-            m_MaximumEnergySourceCapacity = i_MaximumEnergySourceCapacity;
-            m_RemainingEnergySource = i_RemainingEnergySource;
+            m_MaximumCapacity = i_MaximumEnergySourceCapacity;
         }
 
-        public float RemainingEnergySource
+        public float Remaining
         {
             get
             {
-                return m_RemainingEnergySource;
+                if (m_RemainingEnergy != null)
+                {
+                    return m_RemainingEnergy.Value;
+                }
+                else
+                {
+                    throw new FormatException("Value was not yet initialzed");
+                }
             }
             set
             {
-                if(value > m_MaximumEnergySourceCapacity)
+                if(value > m_MaximumCapacity)
                 {
-                    throw new ValueOutOfRangeException("Quantity over maximum level");  ///EXCEPTION to continue///
+                    throw new ValueOutOfRangeException(m_MaximumCapacity, 0); 
+                }
+                else
+                {
+                    m_RemainingEnergy = value;
                 }
             }
         }
 
-        public float MaximumEnergySourceCapacity
+        public float MaximumCapacity
         {
             get
             {
-                return m_MaximumEnergySourceCapacity;
+                return m_MaximumCapacity;
             }
         }
 
@@ -52,6 +62,7 @@ namespace Ex03.GarageLogic
                 return m_EngineType;
             }
         }
+
         public string EngineTypestring
         {
             get
@@ -67,14 +78,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public static List<string> RequiredInfoForCreation()
-        {
-            List<string> requiredInfo = new List<string>();
-            requiredInfo.Add("Please choose engine POWER SOURCE:\n" + Garage.GetEnumOptions(typeof(eEngineType)));
-            requiredInfo.Add("Please enter MAXIMUM POWER AMOUNT:");
-            requiredInfo.Add("Please enter REMAINING POWER AMOUNT:");
-
-            return requiredInfo;
-        }
+        public abstract List<string> RequiredInfoForCreation();
     }
 }

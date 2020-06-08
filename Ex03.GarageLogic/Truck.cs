@@ -6,24 +6,28 @@ namespace Ex03.GarageLogic
 {
     class Truck : Vehicle
     {
-        private bool m_CarryingDangerousGoods;
-        private float m_CargoCapacity;
+        private bool? m_CarryingDangerousGoods;
+        private float? m_CargoCapacity;
 
-        public Truck(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, 
-            float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName, 
-            float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, bool i_CarryingDangerousGoods, float i_CargoCapacity)
-            : base(i_LicenseNumber, i_ModelName, i_EngineType, i_FuelType, i_RemainingEnergySource,
-                  i_MaximumEnergySourceCapacity, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
+        public Truck(string i_LicenseNumber)
+            : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Soler, 120), Vehicle.CreateWheelsForVehicle(16, 28))
         {
-            m_CarryingDangerousGoods = i_CarryingDangerousGoods;
-            m_CargoCapacity = i_CargoCapacity;
+            m_CarryingDangerousGoods = null;
+            m_CargoCapacity = null;
         }
 
         public bool CarryingDangerousGoods
         {
             get
             {
-                return m_CarryingDangerousGoods;
+                if (m_CarryingDangerousGoods.HasValue == true)
+                {
+                    return m_CarryingDangerousGoods.Value;
+                }
+                else
+                {
+                    throw new FormatException("Value was not yet initialzed");
+                }
             }
             set
             {
@@ -35,7 +39,14 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_CargoCapacity;
+                if (m_CargoCapacity.HasValue == true)
+                {
+                    return m_CargoCapacity.Value;
+                }
+                else
+                {
+                    throw new FormatException("Value was not yet initialzed");
+                }
             }
             set
             {
@@ -43,28 +54,19 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public static List<string> RequiredInfoForCreation()
+        public override List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = Vehicle.RequiredInfoForCreation();
-            requiredInfo.Add("Is the truck CARRYING DANGEROUS GOODS?");
+            List<string> requiredInfo = base.RequiredInfoForCreation();
+            requiredInfo.Add("Is the truck CARRYING DANGEROUS GOODS?"+ Environment.NewLine + "YES or NO :");
             requiredInfo.Add("Please enter truck's CARGO CPACITY:");
 
             return requiredInfo;
         }
-        public override List<string> ShowInfo()
+        public override StringBuilder ShowInfo()
         {
-            //List<string> vehicleInfo = Vehicle.ShowInfo();
-            List<string> vehicleInfo = new List<string>();
-            vehicleInfo.Add("ModelName: " + m_ModelName);
-            vehicleInfo.Add("License Number: " + m_LicenseNumber);
-            vehicleInfo.Add("Wheels manufacturer: " + m_Wheels[1].ManufacturerName);
-            vehicleInfo.Add("Wheels current air: " + m_Wheels[1].CurrentAirPressure.ToString());
-            vehicleInfo.Add("Wheels max air pressure: " + m_Wheels[1].MaximumAirPressure.ToString());
-            vehicleInfo.Add("Engine type: " + m_FuelEngine.EngineTypestring);
-            vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.RemainingEnergySource.ToString());
-            vehicleInfo.Add("Remaining source energy: " + m_FuelEngine.MaximumEnergySourceCapacity.ToString());
-            vehicleInfo.Add("Is carrying dangerous goods: " + m_CarryingDangerousGoods.ToString());
-            vehicleInfo.Add("Cargo capacity: " + m_CargoCapacity.ToString());
+            StringBuilder vehicleInfo = base.ShowInfo();
+            vehicleInfo.AppendLine("Is carrying dangerous goods: " + m_CarryingDangerousGoods.ToString());
+            vehicleInfo.AppendLine("Cargo capacity: " + m_CargoCapacity.ToString());
 
             return vehicleInfo;
         }
