@@ -1,75 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Motorcycle : Vehicle
+    class FuelCar : Vehicle
     {
-        public enum eLicenseType
+
+        public enum eCarColor
         {
-            A = 1,
-            A1,
-            AA,
-            B
+            Red = 1,
+            White,
+            Black,
+            Silver
         }
 
-        private eLicenseType m_LicenseType;
-        private int m_EngineCapacity;
+        public enum eDoorsAmount
+        {
+            TwoDoors = 1,
+            ThreeDoors,
+            FourDoors,
+            FiveDoors
+        }
 
-        public Motorcycle(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType, 
-            float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName, float i_CurrentAirPressure, 
-            float i_MaximumAirPressure, int i_WheelsAmount, eLicenseType i_LicenseType, int i_EngineCapacity)
+        private eCarColor m_CarColor;
+        private eDoorsAmount m_DoorsAmount;
+
+        public FuelCar(string i_ModelName, string i_LicenseNumber, Engine.eEngineType i_EngineType, string i_FuelType,
+            float i_RemainingEnergySource, float i_MaximumEnergySourceCapacity, string i_ManufacturerName,
+            float i_CurrentAirPressure, float i_MaximumAirPressure, int i_WheelsAmount, eCarColor i_CarColor, eDoorsAmount i_DoorsAmount)
             : base(i_LicenseNumber, i_ModelName, i_EngineType, i_FuelType, i_RemainingEnergySource,
                   i_MaximumEnergySourceCapacity, i_ManufacturerName, i_CurrentAirPressure, i_MaximumAirPressure, i_WheelsAmount)
         {
-            m_LicenseType = i_LicenseType;
-            m_EngineCapacity = i_EngineCapacity;
+            m_CarColor = i_CarColor;
+            m_DoorsAmount = i_DoorsAmount;
         }
 
-        public eLicenseType LicenseType
+        public eCarColor CarColor
         {
             get
             {
-                return m_LicenseType;
+                return m_CarColor;
+            }
+            set
+            {
+                m_CarColor = value;
             }
         }
-        public string LicenseTypestring
+
+        public eDoorsAmount DoorsAmount
         {
             get
             {
-                if(LicenseType == eLicenseType.A)
-                {
-                    return "A";
-                }
-                else if (LicenseType == eLicenseType.A1)
-                {
-                    return "A1";
-                }
-                else if (LicenseType == eLicenseType.AA)
-                {
-                    return "AA";
-                }
-                else
-                {
-                    return "B";
-                }
-            }
-        }
-        public int EngineCapacity
-        {
-            get
-            {
-                return m_EngineCapacity;
+                return m_DoorsAmount;
             }
         }
 
         public static List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = Vehicle.RequiredInfoForCreation();
-            requiredInfo.Add("Please choose LICENSE TYPE:\n" + Garage.GetEnumOptions(typeof(eLicenseType)));
-            requiredInfo.Add("Please enter ENGINE CPACITY:");
+            requiredInfo.Add("Please choose COLOR:\n" + Garage.GetEnumOptions(typeof(eCarColor)));
+            requiredInfo.Add("Please choose DOORS AMOUNT:\n" + Garage.GetEnumOptions(typeof(eDoorsAmount)));
 
             return requiredInfo;
         }
@@ -94,8 +85,8 @@ namespace Ex03.GarageLogic
                 vehicleInfo.Add("Remaining source energy: " + m_ElectricEngine.RemainingEnergySource.ToString());
                 vehicleInfo.Add("Maximum source energy: " + m_ElectricEngine.MaximumEnergySourceCapacity.ToString());
             }
-            vehicleInfo.Add("License type: " + LicenseTypestring);
-            vehicleInfo.Add("Energy capacity: " + m_EngineCapacity.ToString());
+            vehicleInfo.Add("Car color: " + m_CarColor.ToString());
+            vehicleInfo.Add("Doors amount: " + m_DoorsAmount.ToString());
 
             return vehicleInfo;
         }

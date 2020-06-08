@@ -40,11 +40,11 @@ namespace Ex03.GarageLogic
             switch (vehicleType)
             {
                 case eVehicleType.Motorcycle:
-                    requiredInfo = Motorcycle.RequiredInfoForCreation();
+                    requiredInfo = ElectricMotorcycle.RequiredInfoForCreation();
                     break;
 
                 case eVehicleType.Car:
-                    requiredInfo = Car.RequiredInfoForCreation();
+                    requiredInfo = ElectricCar.RequiredInfoForCreation();
                     break;
 
                 case eVehicleType.Truck:
@@ -67,63 +67,122 @@ namespace Ex03.GarageLogic
                 switch (io_CurrectInstructions)
                 {
                     case 1:
-                        valid = IsValidModelName(i_UserInput);
+                        valid = BuildNewElectricMotorcycle(i_UserInput, io_CurrectInstructions, ref i_MaximumPowerCapacity, ref io_MaximumAirPresure);
                         break;
                     case 2:
-                        valid = IsValidEngine(i_UserInput, ref io_IsFuelEngine);
+                        valid = BuildNewFuelMotorcycle(i_UserInput, io_CurrectInstructions, ref i_MaximumPowerCapacity, ref io_MaximumAirPresure);
                         break;
                     case 3:
-                        valid = IsValidMaximumPowerAmount(i_UserInput, i_VehicleType, ref i_MaximumPowerCapacity);
+                        valid = BuildNewElectricCar(i_UserInput, io_CurrectInstructions, ref i_MaximumPowerCapacity, ref io_MaximumAirPresure);
                         break;
                     case 4:
-                        valid = IsValidRemainingPowerAmount(i_UserInput, i_VehicleType, i_MaximumPowerCapacity);
+                        valid = BuildNewFuelCar(i_UserInput, io_CurrectInstructions, ref i_MaximumPowerCapacity, ref io_MaximumAirPresure);
                         break;
                     case 5:
-                        valid = IsValidFuelType(i_UserInput, i_VehicleType);
-                        break;
-                    case 6:
-                        valid = IsValidWheelsManufacturerName(i_UserInput);
-                        break;
-                    case 7:
-                        valid = IsValidMaximumAirPressure(i_UserInput);
-                        break;
-                    case 8:
-                        valid = IsValidWheelsAirPressure(i_UserInput, ref io_MaximumAirPresure);
-                        break;
-                    case 9:
-                        valid = IsValidWheelsAmount(i_UserInput, i_VehicleType);
+                        valid = BuildNewTruck(i_UserInput, io_CurrectInstructions, ref i_MaximumPowerCapacity, ref io_MaximumAirPresure);
                         break;
                 }
             }
-            else
-            {
-                switch ((eVehicleType)i_VehicleType)
-                {
-                    case eVehicleType.Motorcycle:
-                        valid = BuildNewMotorcycle(i_UserInput, io_CurrectInstructions - 9);
-                        break;
-                    case eVehicleType.Car:
-                        valid = BuildNewCar(i_UserInput, io_CurrectInstructions - 9);
-                        break;
-                    case eVehicleType.Truck:
-                        valid = BuildNewTruck(i_UserInput, io_CurrectInstructions - 9);
-                        break;
-                }
-            }
+            //else
+            //{
+            //    switch ((eVehicleType)i_VehicleType)
+            //    {
+            //        case eVehicleType.Motorcycle:
+            //            valid = BuildNewElectricMotorcycle(i_UserInput, io_CurrectInstructions - 9);
+            //            break;
+            //        case eVehicleType.Car:
+            //            valid = BuildNewElectricCar(i_UserInput, io_CurrectInstructions - 9);
+            //            break;
+            //        case eVehicleType.Truck:
+            //            valid = BuildNewTruck(i_UserInput, io_CurrectInstructions - 9);
+            //            break;
+            //    }
+            //}
 
             return valid;
         }
 
-        public bool BuildNewMotorcycle(string i_Request, int i_CurrectInstructions)
+        public bool BuildNewElectricMotorcycle(string i_UserInput, int i_CurrectInstructions, ref float i_MaximumPowerCapacity, ref float io_MaximumAirPresure)
         {
             bool valid = false;
             switch (i_CurrectInstructions)
             {
                 case 1:
-                    valid = IsValidLicenseType(i_Request);
+                    valid = IsValidModelName(i_UserInput);
                     break;
                 case 2:
-                    valid = IsValidEngineCapacity(i_Request);
+                    valid = IsValidEngine(i_UserInput, ref io_IsFuelEngine);
+                    break;
+                case 3:
+                    valid = IsValidMaximumPowerAmount(i_UserInput, 1, ref i_MaximumPowerCapacity);
+                    break;
+                case 4:
+                    valid = IsValidRemainingPowerAmount(i_UserInput, 1, i_MaximumPowerCapacity);
+                    break;
+                //case 5:
+                    //valid = IsValidFuelType(i_UserInput, 1);
+                    //break;
+                case 6:
+                    valid = IsValidWheelsManufacturerName(i_UserInput);
+                    break;
+                case 7:
+                    valid = IsValidMaximumAirPressure(i_UserInput);
+                    break;
+                case 8:
+                    valid = IsValidWheelsAirPressure(i_UserInput, ref io_MaximumAirPresure);
+                    break;
+                case 9:
+                    valid = IsValidWheelsAmount(i_UserInput, 1);
+                    break;
+                case 10:
+                    valid = IsValidLicenseType(i_UserInput);
+                    break;
+                case 11:
+                    valid = IsValidEngineCapacity(i_UserInput);
+                    break;
+                default:
+
+                    break;
+            }
+            return valid;
+        }
+        public bool BuildNewFuelMotorcycle(string i_UserInput, int i_CurrectInstructions, ref float i_MaximumPowerCapacity, ref float io_MaximumAirPresure)
+        {
+            bool valid = false;
+            switch (i_CurrectInstructions)
+            {
+                case 1:
+                    valid = IsValidModelName(i_UserInput);
+                    break;
+                case 2:
+                    valid = IsValidEngine(i_UserInput, ref io_IsFuelEngine);
+                    break;
+                case 3:
+                    valid = IsValidMaximumPowerAmount(i_UserInput, 2, ref i_MaximumPowerCapacity);
+                    break;
+                case 4:
+                    valid = IsValidRemainingPowerAmount(i_UserInput, 2, i_MaximumPowerCapacity);
+                    break;
+                case 5:
+                    valid = IsValidFuelType(i_UserInput, 2);
+                    break;
+                case 6:
+                    valid = IsValidWheelsManufacturerName(i_UserInput);
+                    break;
+                case 7:
+                    valid = IsValidMaximumAirPressure(i_UserInput);
+                    break;
+                case 8:
+                    valid = IsValidWheelsAirPressure(i_UserInput, ref io_MaximumAirPresure);
+                    break;
+                case 9:
+                    valid = IsValidWheelsAmount(i_UserInput, 2);
+                    break;
+                case 10:
+                    valid = IsValidLicenseType(i_UserInput);
+                    break;
+                case 11:
+                    valid = IsValidEngineCapacity(i_UserInput);
                     break;
                 default:
 
@@ -132,16 +191,87 @@ namespace Ex03.GarageLogic
             return valid;
         }
 
-        public bool BuildNewCar(string i_Request, int i_CurrectInstructions)
+        public bool BuildNewElectricCar(string i_UserInput, int i_CurrectInstructions, ref float i_MaximumPowerCapacity, ref float io_MaximumAirPresure)
         {
             bool valid = false;
             switch (i_CurrectInstructions)
             {
                 case 1:
-                    valid = IsValidCarColor(i_Request);
+                    valid = IsValidModelName(i_UserInput);
                     break;
                 case 2:
-                    valid = IsValidDoorsAmount(i_Request);
+                    valid = IsValidEngine(i_UserInput, ref io_IsFuelEngine);
+                    break;
+                case 3:
+                    valid = IsValidMaximumPowerAmount(i_UserInput, 3, ref i_MaximumPowerCapacity);
+                    break;
+                case 4:
+                    valid = IsValidRemainingPowerAmount(i_UserInput, 3, i_MaximumPowerCapacity);
+                    break;
+                //case 5:
+                    //valid = IsValidFuelType(i_UserInput, 1);
+                    //break;
+                case 6:
+                    valid = IsValidWheelsManufacturerName(i_UserInput);
+                    break;
+                case 7:
+                    valid = IsValidMaximumAirPressure(i_UserInput);
+                    break;
+                case 8:
+                    valid = IsValidWheelsAirPressure(i_UserInput, ref io_MaximumAirPresure);
+                    break;
+                case 9:
+                    valid = IsValidWheelsAmount(i_UserInput, 3);
+                    break;
+                case 10:
+                    valid = IsValidLicenseType(i_UserInput);
+                    break;
+                case 11:
+                    valid = IsValidEngineCapacity(i_UserInput);
+                    break;
+                default:
+
+                    break;
+            }
+            return valid;
+        }
+        public bool BuildNewFuelCar(string i_UserInput, int i_CurrectInstructions, ref float i_MaximumPowerCapacity, ref float io_MaximumAirPresure)
+        {
+            bool valid = false;
+            switch (i_CurrectInstructions)
+            {
+                case 1:
+                    valid = IsValidModelName(i_UserInput);
+                    break;
+                case 2:
+                    valid = IsValidEngine(i_UserInput, ref io_IsFuelEngine);
+                    break;
+                case 3:
+                    valid = IsValidMaximumPowerAmount(i_UserInput, 4, ref i_MaximumPowerCapacity);
+                    break;
+                case 4:
+                    valid = IsValidRemainingPowerAmount(i_UserInput, 4, i_MaximumPowerCapacity);
+                    break;
+                case 5:
+                    valid = IsValidFuelType(i_UserInput, 4);
+                    break;
+                case 6:
+                    valid = IsValidWheelsManufacturerName(i_UserInput);
+                    break;
+                case 7:
+                    valid = IsValidMaximumAirPressure(i_UserInput);
+                    break;
+                case 8:
+                    valid = IsValidWheelsAirPressure(i_UserInput, ref io_MaximumAirPresure);
+                    break;
+                case 9:
+                    valid = IsValidWheelsAmount(i_UserInput, 4);
+                    break;
+                case 10:
+                    valid = IsValidLicenseType(i_UserInput);
+                    break;
+                case 11:
+                    valid = IsValidEngineCapacity(i_UserInput);
                     break;
                 default:
 
@@ -150,16 +280,43 @@ namespace Ex03.GarageLogic
             return valid;
         }
 
-        public bool BuildNewTruck(string i_Request, int i_CurrectInstructions)
+        public bool BuildNewTruck(string i_UserInput, int i_CurrectInstructions, ref float i_MaximumPowerCapacity, ref float io_MaximumAirPresure)
         {
             bool valid = false;
             switch (i_CurrectInstructions)
             {
                 case 1:
-                    valid = IsValidDangerousGoods(i_Request);
+                    valid = IsValidModelName(i_UserInput);
                     break;
                 case 2:
-                    valid = IsValidCargoCapacity(i_Request);
+                    valid = IsValidEngine(i_UserInput, ref io_IsFuelEngine);
+                    break;
+                case 3:
+                    valid = IsValidMaximumPowerAmount(i_UserInput, 5, ref i_MaximumPowerCapacity);
+                    break;
+                case 4:
+                    valid = IsValidRemainingPowerAmount(i_UserInput, 5, i_MaximumPowerCapacity);
+                    break;
+                case 5:
+                    valid = IsValidFuelType(i_UserInput, 5);
+                    break;
+                case 6:
+                    valid = IsValidWheelsManufacturerName(i_UserInput);
+                    break;
+                case 7:
+                    valid = IsValidMaximumAirPressure(i_UserInput);
+                    break;
+                case 8:
+                    valid = IsValidWheelsAirPressure(i_UserInput, ref io_MaximumAirPresure);
+                    break;
+                case 9:
+                    valid = IsValidWheelsAmount(i_UserInput, 5);
+                    break;
+                case 10:
+                    valid = IsValidLicenseType(i_UserInput);
+                    break;
+                case 11:
+                    valid = IsValidEngineCapacity(i_UserInput);
                     break;
                 default:
 
@@ -189,14 +346,22 @@ namespace Ex03.GarageLogic
             switch (i_UserInput)
             {
                 case 1:
-                    result = Motorcycle.RequiredInfoForCreation();
+                    result = ElectricMotorcycle.RequiredInfoForCreation();
                     io_MaxInstructions = 12;
                     break;
                 case 2:
-                    result = Car.RequiredInfoForCreation();
+                    result = FuelMotorcycle.RequiredInfoForCreation();
                     io_MaxInstructions = 12;
                     break;
                 case 3:
+                    result = ElectricCar.RequiredInfoForCreation();
+                    io_MaxInstructions = 12;
+                    break;
+                case 4:
+                    result = FuelCar.RequiredInfoForCreation();
+                    io_MaxInstructions = 12;
+                    break;
+                case 5:
                     result = Truck.RequiredInfoForCreation();
                     io_MaxInstructions = 12;
                     break;
@@ -368,12 +533,12 @@ namespace Ex03.GarageLogic
 
         public bool IsValidCarColor(string i_CarColor)
         {
-            return Enum.IsDefined(typeof(Car.eCarColor), i_CarColor);
+            return Enum.IsDefined(typeof(ElectricCar.eCarColor), i_CarColor);
         }
 
         public bool IsValidDoorsAmount(string i_CarDoorsAmount)
         {
-            return Enum.IsDefined(typeof(Car.eDoorsAmount), i_CarDoorsAmount);
+            return Enum.IsDefined(typeof(ElectricCar.eDoorsAmount), i_CarDoorsAmount);
 
         }
 
@@ -405,7 +570,7 @@ namespace Ex03.GarageLogic
 
         public bool IsValidLicenseType(string i_LicenseType)
         {
-            return Enum.IsDefined(typeof(Motorcycle.eLicenseType), i_LicenseType);
+            return Enum.IsDefined(typeof(ElectricMotorcycle.eLicenseType), i_LicenseType);
         }
 
         public bool IsValidEngineCapacity(string i_EngineCapacity)
@@ -500,13 +665,13 @@ namespace Ex03.GarageLogic
             {
                 case eVehicleType.Motorcycle:
                         Int32.TryParse(i_BuildInstructions[10], out type);
-                        Motorcycle motorecycle = new Motorcycle(i_BuildInstructions[0], i_BuildInstructions[1], (Engine.eEngineType)Int32.Parse(i_BuildInstructions[2]), i_BuildInstructions[3], float.Parse(i_BuildInstructions[4]), float.Parse(i_BuildInstructions[5]), i_BuildInstructions[6], float.Parse(i_BuildInstructions[7]), float.Parse(i_BuildInstructions[8]), Int32.Parse(i_BuildInstructions[9]), (Motorcycle.eLicenseType)type, Int32.Parse(i_BuildInstructions[11]));
+                        ElectricMotorcycle motorecycle = new ElectricMotorcycle(i_BuildInstructions[0], i_BuildInstructions[1], (Engine.eEngineType)Int32.Parse(i_BuildInstructions[2]), i_BuildInstructions[3], float.Parse(i_BuildInstructions[4]), float.Parse(i_BuildInstructions[5]), i_BuildInstructions[6], float.Parse(i_BuildInstructions[7]), float.Parse(i_BuildInstructions[8]), Int32.Parse(i_BuildInstructions[9]), (ElectricMotorcycle.eLicenseType)type, Int32.Parse(i_BuildInstructions[11]));
                         m_VehicleList.Add(motorecycle);
                     break;
                 case eVehicleType.Car:
                         Int32.TryParse(i_BuildInstructions[10], out color);
                         Int32.TryParse(i_BuildInstructions[11], out doors);
-                        Car car = new Car(i_BuildInstructions[0], i_BuildInstructions[1], (Engine.eEngineType)Int32.Parse(i_BuildInstructions[2]), i_BuildInstructions[3], float.Parse(i_BuildInstructions[4]), float.Parse(i_BuildInstructions[5]), i_BuildInstructions[6], float.Parse(i_BuildInstructions[7]), float.Parse(i_BuildInstructions[8]), Int32.Parse(i_BuildInstructions[9]), (Car.eCarColor)color, (Car.eDoorsAmount)doors);
+                        ElectricCar car = new ElectricCar(i_BuildInstructions[0], i_BuildInstructions[1], (Engine.eEngineType)Int32.Parse(i_BuildInstructions[2]), i_BuildInstructions[3], float.Parse(i_BuildInstructions[4]), float.Parse(i_BuildInstructions[5]), i_BuildInstructions[6], float.Parse(i_BuildInstructions[7]), float.Parse(i_BuildInstructions[8]), Int32.Parse(i_BuildInstructions[9]), (ElectricCar.eCarColor)color, (ElectricCar.eDoorsAmount)doors);
                         m_VehicleList.Add(car);
                     break;
                 case eVehicleType.Truck:
