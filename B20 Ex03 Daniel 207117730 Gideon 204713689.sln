@@ -9,6 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex03.ConsoleUI", "Ex03.Cons
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C63687F-F7A9-4164-9DC7-A2618AEBC6FE}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\..\Desktop\B20 Ex03 Daniel 207117730 Gideon 204713689.docx = ..\..\..\Desktop\B20 Ex03 Daniel 207117730 Gideon 204713689.docx
+		Ex03.ConsoleUI\ClassDiagram1.cd = Ex03.ConsoleUI\ClassDiagram1.cd
+		Ex03.GarageLogic\ClassDiagram2.cd = Ex03.GarageLogic\ClassDiagram2.cd
 		TextFile1.txt = TextFile1.txt
 	EndProjectSection
 EndProject
