@@ -111,7 +111,7 @@ namespace Ex03.GarageLogic
 
         internal override StringBuilder ShowInfo()
         {
-            StringBuilder vehicleInfo = base.ShowInfo();
+            StringBuilder vehicleInfo = ShowInfoVehicle();
             
             vehicleInfo.AppendLine("Car color: " + m_CarColor.ToString());
             vehicleInfo.AppendLine("Doors amount: " + m_DoorsAmount.ToString());

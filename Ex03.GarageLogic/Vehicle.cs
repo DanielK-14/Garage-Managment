@@ -74,7 +74,9 @@ namespace Ex03.GarageLogic
             }
         }
 
-        internal virtual StringBuilder ShowInfo()
+        internal abstract StringBuilder ShowInfo();
+
+        protected virtual StringBuilder ShowInfoVehicle()
         {
             StringBuilder vehicleInfo = new StringBuilder();
             vehicleInfo.AppendLine("ModelName: " + m_ModelName);
@@ -102,7 +104,7 @@ namespace Ex03.GarageLogic
 
         internal abstract List<string> RequiredInfoForCreation();
 
-        internal virtual List<string> RequiredInfoForCreationOfVehicle()
+        protected virtual List<string> RequiredInfoForCreationOfVehicle()
         {
             List<string> engineInformation;
             if (r_Engine is ElectricEngine)

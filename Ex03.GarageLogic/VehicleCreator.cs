@@ -2,7 +2,7 @@
 {
     internal class VehicleCreator
     {
-        public enum eVehicleType
+        internal enum eVehicleType
         {
             ElectricMotorcycle = 1,
             FuelMotorcycle,
@@ -11,7 +11,7 @@
             Truck
         }
 
-        public static Vehicle CreateVehicle(string i_VehicleType, string i_LicenseNumber)
+        internal static Vehicle CreateVehicle(string i_VehicleType, string i_LicenseNumber)
         {
             eVehicleType vehicleType = (eVehicleType)int.Parse(i_VehicleType);
             Vehicle vehicle = null;

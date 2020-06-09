@@ -94,7 +94,7 @@ namespace Ex03.GarageLogic
 
         internal override StringBuilder ShowInfo()
         {
-            StringBuilder vehicleInfo = base.ShowInfo();
+            StringBuilder vehicleInfo = ShowInfoVehicle();
             vehicleInfo.AppendLine("License type: " + Enum.GetName(typeof(eLicenseType), m_LicenseType));
             vehicleInfo.AppendLine("Engine capacity: " + m_EngineCapacity.ToString());
 

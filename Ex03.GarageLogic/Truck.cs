@@ -92,7 +92,7 @@ namespace Ex03.GarageLogic
 
         internal override StringBuilder ShowInfo()
         {
-            StringBuilder vehicleInfo = base.ShowInfo();
+            StringBuilder vehicleInfo = ShowInfoVehicle();
             vehicleInfo.AppendLine("Is carrying dangerous goods: " + m_CarryingDangerousGoods.ToString());
             vehicleInfo.AppendLine("Cargo capacity: " + m_CargoCapacity.ToString());
 
