@@ -4,16 +4,16 @@ namespace Ex03.GarageLogic
 {
     class VehicleDetails
     {
-        private readonly Vehicle m_Vehicle;
-        private readonly string m_OwnerName;
-        private readonly string m_PhoneNumber;
+        private readonly Vehicle r_Vehicle;
+        private readonly string r_OwnerName;
+        private readonly string r_PhoneNumber;
         private eVehicleStatus? m_Status;
 
         public VehicleDetails(Vehicle i_Vehicle, string i_OwnerName, string i_PhoneNumber)
         {
-            m_Vehicle = i_Vehicle;
-            m_OwnerName = i_OwnerName;
-            m_PhoneNumber = i_PhoneNumber;
+            r_Vehicle = i_Vehicle;
+            r_OwnerName = i_OwnerName;
+            r_PhoneNumber = i_PhoneNumber;
             m_Status = eVehicleStatus.InRepair;
         }
 
@@ -28,7 +28,7 @@ namespace Ex03.GarageLogic
         {
             get 
             {
-                return m_Vehicle;
+                return r_Vehicle;
             }
         }
 
@@ -36,7 +36,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_OwnerName;
+                return r_OwnerName;
             }
         }
 
@@ -44,7 +44,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_PhoneNumber;
+                return r_PhoneNumber;
             }
         }
 

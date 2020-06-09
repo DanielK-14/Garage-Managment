@@ -11,14 +11,14 @@ namespace Ex03.GarageLogic
             Fuel,
         }
 
-        protected readonly eEngineType m_EngineType;
+        protected readonly eEngineType r_EngineType;
         protected float? m_RemainingEnergy;
-        protected readonly float m_MaximumCapacity;
+        protected readonly float r_MaximumCapacity;
 
         public Engine(eEngineType i_EngineType, float i_MaximumEnergySourceCapacity)
         {
-            m_EngineType = i_EngineType;
-            m_MaximumCapacity = i_MaximumEnergySourceCapacity;
+            r_EngineType = i_EngineType;
+            r_MaximumCapacity = i_MaximumEnergySourceCapacity;
         }
 
         public float Remaining
@@ -36,9 +36,9 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                if(value > m_MaximumCapacity || value < 0)
+                if(value > r_MaximumCapacity || value < 0)
                 {
-                    throw new ValueOutOfRangeException(m_MaximumCapacity, 0); 
+                    throw new ValueOutOfRangeException(r_MaximumCapacity, 0); 
                 }
                 else
                 {
@@ -51,7 +51,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_MaximumCapacity;
+                return r_MaximumCapacity;
             }
         }
 
@@ -59,7 +59,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_EngineType;
+                return r_EngineType;
             }
         }
 

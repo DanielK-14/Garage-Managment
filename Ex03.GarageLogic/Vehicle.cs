@@ -7,15 +7,15 @@ namespace Ex03.GarageLogic
     abstract class Vehicle
     {
         protected string m_ModelName;
-        protected readonly string m_LicenseNumber;
-        protected readonly Engine m_Engine;
+        protected readonly string r_LicenseNumber;
+        protected readonly Engine r_Engine;
         protected List<Wheel> m_Wheels;
 
         public Vehicle(string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels)
         {
-            m_LicenseNumber = i_LicenseNumber;
+            r_LicenseNumber = i_LicenseNumber;
             m_ModelName = string.Empty;
-            m_Engine = i_Engine;
+            r_Engine = i_Engine;
             m_Wheels = i_Wheels;
         }
 
@@ -42,7 +42,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_LicenseNumber;
+                return r_LicenseNumber;
             }
         }
 
@@ -50,7 +50,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_Engine;
+                return r_Engine;
             }
         }
 
@@ -66,13 +66,13 @@ namespace Ex03.GarageLogic
         {
             StringBuilder vehicleInfo = new StringBuilder();
             vehicleInfo.AppendLine("ModelName: " + m_ModelName);
-            vehicleInfo.AppendLine("License Number: " + m_LicenseNumber);
+            vehicleInfo.AppendLine("License Number: " + r_LicenseNumber);
             vehicleInfo.AppendLine("Wheels manufacturer: " + m_Wheels[1].ManufacturerName);
             vehicleInfo.AppendLine("Wheels current air: " + m_Wheels[1].CurrentAirPressure.ToString());
             vehicleInfo.AppendLine("Wheels max air pressure: " + m_Wheels[1].MaximumAirPressure.ToString());
-            if (m_Engine is FuelEngine)
+            if (r_Engine is FuelEngine)
             {
-                FuelEngine fuelEngine = m_Engine as FuelEngine;
+                FuelEngine fuelEngine = r_Engine as FuelEngine;
                 vehicleInfo.AppendLine("Engine type: " + Enum.GetName(typeof(Engine.eEngineType), fuelEngine.EngineType));
                 vehicleInfo.AppendLine("Fuel type: " + Enum.GetName(typeof(FuelEngine.eFuelType), fuelEngine.FuelType));
                 vehicleInfo.AppendLine("Remaining fuel amount: " + fuelEngine.Remaining.ToString());
@@ -80,9 +80,9 @@ namespace Ex03.GarageLogic
             }
             else
             {
-                vehicleInfo.AppendLine("Engine type: " + Enum.GetName(typeof(Engine.eEngineType), m_Engine.EngineType));
-                vehicleInfo.AppendLine("Remaining battery energy hours : " + m_Engine.Remaining.ToString());
-                vehicleInfo.AppendLine("Maximum battery energy in hours : " + m_Engine.MaximumCapacity.ToString());
+                vehicleInfo.AppendLine("Engine type: " + Enum.GetName(typeof(Engine.eEngineType), r_Engine.EngineType));
+                vehicleInfo.AppendLine("Remaining battery energy hours : " + r_Engine.Remaining.ToString());
+                vehicleInfo.AppendLine("Maximum battery energy in hours : " + r_Engine.MaximumCapacity.ToString());
             }
 
             return vehicleInfo;
@@ -91,14 +91,14 @@ namespace Ex03.GarageLogic
         public virtual List<string> RequiredInfoForCreation()
         {
             List<string> engineInformation;
-            if (m_Engine is ElectricEngine)
+            if (r_Engine is ElectricEngine)
             {
-                ElectricEngine electricEngine = m_Engine as ElectricEngine;
+                ElectricEngine electricEngine = r_Engine as ElectricEngine;
                 engineInformation = electricEngine.RequiredInfoForCreation();
             }
             else
             {
-                FuelEngine fuelEngine = m_Engine as FuelEngine;
+                FuelEngine fuelEngine = r_Engine as FuelEngine;
                 engineInformation = fuelEngine.RequiredInfoForCreation();
             }
 
@@ -157,11 +157,11 @@ namespace Ex03.GarageLogic
         {
             private string m_ManufacturerName;
             private float? m_CurrentAirPressure;
-            private readonly float m_MaximumAirPressure;
+            private readonly float r_MaximumAirPressure;
 
             public Wheel(float i_MaximumAirPressure)
             {
-                m_MaximumAirPressure = i_MaximumAirPressure;
+                r_MaximumAirPressure = i_MaximumAirPressure;
             }
 
             public string ManufacturerName
@@ -198,9 +198,9 @@ namespace Ex03.GarageLogic
                 }
                 set
                 {
-                    if(value > m_MaximumAirPressure || value < 0)
+                    if(value > r_MaximumAirPressure || value < 0)
                     {
-                        throw new ValueOutOfRangeException(m_MaximumAirPressure, 0);
+                        throw new ValueOutOfRangeException(r_MaximumAirPressure, 0);
                     }
                     else
                     {
@@ -213,13 +213,13 @@ namespace Ex03.GarageLogic
             {
                 get
                 {
-                    return m_MaximumAirPressure;
+                    return r_MaximumAirPressure;
                 }
             }
 
             public void AddAirToWheel(float i_AmountOfAirToAdd)
             {
-                if (m_CurrentAirPressure < m_MaximumAirPressure)
+                if (m_CurrentAirPressure < r_MaximumAirPressure)
                 {
                     m_CurrentAirPressure = m_CurrentAirPressure + i_AmountOfAirToAdd;
                 }
@@ -229,7 +229,7 @@ namespace Ex03.GarageLogic
             {
                 if (m_CurrentAirPressure.HasValue == true)
                 {
-                    float difference = m_MaximumAirPressure - m_CurrentAirPressure.Value;
+                    float difference = r_MaximumAirPressure - m_CurrentAirPressure.Value;
                     if (difference > 0)
                     {
                         AddAirToWheel(difference);
@@ -242,7 +242,7 @@ namespace Ex03.GarageLogic
                 List<string> requiredInfo = new List<string>();
 
                 requiredInfo.Add("Please enter WHEEL'S MANUFACTURER NAME:");
-                requiredInfo.Add(string.Format("Please enter current WHEEL'S AIR PRESSURE (MAXIMUM: {0}):", m_MaximumAirPressure));
+                requiredInfo.Add(string.Format("Please enter current WHEEL'S AIR PRESSURE (MAXIMUM: {0}):", r_MaximumAirPressure));
 
                 return requiredInfo;
             }

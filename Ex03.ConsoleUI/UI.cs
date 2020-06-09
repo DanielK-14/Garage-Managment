@@ -7,7 +7,7 @@ namespace Ex03.ConsoleUI
 {
     public class UI
     {
-        private static Garage m_Garage = new Garage();
+        private static Garage s_Garage = new Garage();
 
         private const string k_MainMenuText =
 @"Please choose from the following options (1-8):
@@ -96,15 +96,15 @@ namespace Ex03.ConsoleUI
             object vehicle;
 
             licenseNumber = getLicenseNumber();
-            if(m_Garage.IfLicenseNumberExsitsChangeStatusInRepair(licenseNumber) != true)
+            if(s_Garage.IfLicenseNumberExsitsChangeStatusInRepair(licenseNumber) != true)
             {
                 vehicleTypeNumber = getVehicleInfo();
                 vehicle = VehicleCreator.CreateVehicle(vehicleTypeNumber, licenseNumber);
-                infoRequiredForCreation = m_Garage.GetAllInformationRequiredForThisTypeOfVehicle(vehicleTypeNumber, vehicle);
+                infoRequiredForCreation = s_Garage.GetAllInformationRequiredForThisTypeOfVehicle(vehicleTypeNumber, vehicle);
                 getUserInputForCreationAndFillVehicleData(infoRequiredForCreation, vehicleTypeNumber, vehicle);
                 ownerName = getOwnerName();
                 phoneNumber = getPhoneNumber();
-                m_Garage.AddVehicleToGarage(licenseNumber, vehicle, ownerName, phoneNumber);
+                s_Garage.AddVehicleToGarage(licenseNumber, vehicle, ownerName, phoneNumber);
             }
             else
             {
@@ -125,7 +125,7 @@ namespace Ex03.ConsoleUI
                 {
                     Console.Write("Please enter vehicle's OWNER NAME: ");
                     ownerName = Console.ReadLine();
-                    m_Garage.CheckOwnerName(ownerName);
+                    s_Garage.CheckOwnerName(ownerName);
                     valid = true;
                 }
                 catch (Exception ex)
@@ -152,7 +152,7 @@ namespace Ex03.ConsoleUI
                 { 
                     Console.Write("Please enter owner's PHONE NUMBER: ");
                     phoneNumber = Console.ReadLine();
-                    m_Garage.CheckPhone(phoneNumber);
+                    s_Garage.CheckPhone(phoneNumber);
                     valid = true;
                 }
                 catch (Exception ex)
@@ -178,7 +178,7 @@ namespace Ex03.ConsoleUI
                 {
                     Console.Write("Please enter LICENSE NUMBER: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckIfLicenseIsValid(licenseNumber);
+                    s_Garage.CheckIfLicenseIsValid(licenseNumber);
                     valid = true;
                 }
                 catch (Exception ex)
@@ -202,9 +202,9 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    Console.WriteLine(m_Garage.GetGarageVehiclesTypes());
+                    Console.WriteLine(s_Garage.GetGarageVehiclesTypes());
                     userVehicleTypeInput = Console.ReadLine();
-                    m_Garage.ValidVehicleType(userVehicleTypeInput);
+                    s_Garage.ValidVehicleType(userVehicleTypeInput);
                     valid = true;
                 }
                 catch (Exception ex)
@@ -219,7 +219,7 @@ namespace Ex03.ConsoleUI
             return userVehicleTypeInput;
         }
 
-        private static void getUserInputForCreationAndFillVehicleData(List<string> i_InfoRequired, string i_VehicleType, object vehicle)
+        private static void getUserInputForCreationAndFillVehicleData(List<string> i_InfoRequired, string i_VehicleType, object i_Vehicle)
         {
             Console.Clear();
             int requestNumber = 1;
@@ -235,7 +235,7 @@ namespace Ex03.ConsoleUI
                     {
                         Console.WriteLine(request);
                         userInput = Console.ReadLine();
-                        m_Garage.CheckInputForCreation(userInput, requestNumber, i_VehicleType, vehicle);
+                        s_Garage.CheckInputForCreation(userInput, requestNumber, i_VehicleType, i_Vehicle);
                         requestNumber++;
                         validInput = true;
 
@@ -261,11 +261,11 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    Console.WriteLine("Choose status for search : " + m_Garage.GetVehiclesPossibleStatusesInGarage());
+                    Console.WriteLine("Choose status for search : " + s_Garage.GetVehiclesPossibleStatusesInGarage());
                     userInput = Console.ReadLine();
-                    m_Garage.CheckInputedStatus(userInput);
+                    s_Garage.CheckInputedStatus(userInput);
                     valid = true;
-                    List<string> matchedLicenseNumbers = m_Garage.GetLicenseNumbersInStatus(userInput);
+                    List<string> matchedLicenseNumbers = s_Garage.GetLicenseNumbersInStatus(userInput);
                     foreach (string LicenseNumber in matchedLicenseNumbers)
                     {
                         Console.WriteLine(LicenseNumber);
@@ -292,13 +292,13 @@ namespace Ex03.ConsoleUI
                 {
                     Console.Write("Please enter license number: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+                    s_Garage.CheckLicenseNumberInGarage(licenseNumber);
 
-                    Console.WriteLine("Choose status to change to :" + m_Garage.GetVehiclesPossibleStatusesInGarage());
+                    Console.WriteLine("Choose status to change to :" + s_Garage.GetVehiclesPossibleStatusesInGarage());
                     statusInput = Console.ReadLine();
-                    m_Garage.CheckInputedStatus(statusInput);
+                    s_Garage.CheckInputedStatus(statusInput);
 
-                    m_Garage.ChangeVehicleStatus(licenseNumber, statusInput);
+                    s_Garage.ChangeVehicleStatus(licenseNumber, statusInput);
                     valid = true;
                 }
                 catch (Exception ex)
@@ -322,8 +322,8 @@ namespace Ex03.ConsoleUI
                 {
                     Console.Write("Please enter license number to fill air-pressure wheels to maximum: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
-                    m_Garage.FillAirInVehicleWheelsToMax(licenseNumber);
+                    s_Garage.CheckLicenseNumberInGarage(licenseNumber);
+                    s_Garage.FillAirInVehicleWheelsToMax(licenseNumber);
                     valid = true;
                 }
                 catch(Exception ex)
@@ -348,17 +348,17 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine("Please enter license number to refuel: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckLicenseNumberForRefuel(licenseNumber);
+                    s_Garage.CheckLicenseNumberForRefuel(licenseNumber);
                     Console.Clear();
 
-                    Console.WriteLine("Choose fuel type to fill :" + m_Garage.GetFuelTypes());
+                    Console.WriteLine("Choose fuel type to fill :" + s_Garage.GetFuelTypes());
                     fuelType = Console.ReadLine();
-                    m_Garage.CheckIfFuelTypeIsValid(fuelType);
+                    s_Garage.CheckIfFuelTypeIsValid(fuelType);
                     Console.Clear();
 
-                    Console.WriteLine("How much fuel do you want to fill? " + m_Garage.VehiclesMaxAndCurrentSourceCapacity(licenseNumber));
+                    Console.WriteLine("How much fuel do you want to fill? " + s_Garage.VehiclesMaxAndCurrentSourceCapacity(licenseNumber));
                     fuelAmount = Console.ReadLine();
-                    m_Garage.RefuelVehicle(licenseNumber, fuelType, fuelAmount);
+                    s_Garage.RefuelVehicle(licenseNumber, fuelType, fuelAmount);
 
                     valid = true;
                 }
@@ -384,12 +384,12 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine("Please enter license number to charge up battery: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckLicenseNumberForRecharge(licenseNumber);
+                    s_Garage.CheckLicenseNumberForRecharge(licenseNumber);
                     Console.Clear();
 
-                    Console.WriteLine("How much energy do you want to fill? " + m_Garage.VehiclesMaxAndCurrentSourceCapacity(licenseNumber));
+                    Console.WriteLine("How much energy do you want to fill? " + s_Garage.VehiclesMaxAndCurrentSourceCapacity(licenseNumber));
                     amountToCharge = Console.ReadLine();
-                    m_Garage.ChargeVehicle(licenseNumber, amountToCharge);
+                    s_Garage.ChargeVehicle(licenseNumber, amountToCharge);
                     Console.Clear();
 
                     valid = true;
@@ -416,8 +416,8 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine("Please enter The license number of which vehicle's information you want to see: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
-                    Console.WriteLine(m_Garage.GetVehicleInfo(licenseNumber));
+                    s_Garage.CheckLicenseNumberInGarage(licenseNumber);
+                    Console.WriteLine(s_Garage.GetVehicleInfo(licenseNumber));
                     valid = true;
                 }
                 catch (Exception ex)
