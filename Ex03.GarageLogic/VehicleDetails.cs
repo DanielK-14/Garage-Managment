@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
         private readonly string r_PhoneNumber;
         private eVehicleStatus? m_Status;
 
-        public VehicleDetails(Vehicle i_Vehicle, string i_OwnerName, string i_PhoneNumber)
+        internal VehicleDetails(Vehicle i_Vehicle, string i_OwnerName, string i_PhoneNumber)
         {
             r_Vehicle = i_Vehicle;
             r_OwnerName = i_OwnerName;
@@ -17,14 +17,14 @@ namespace Ex03.GarageLogic
             m_Status = eVehicleStatus.InRepair;
         }
 
-        public enum eVehicleStatus
+        internal enum eVehicleStatus
         {
             InRepair = 1,
             Fixed,
             Paid
         }
 
-        public Vehicle Vehicle
+        internal Vehicle Vehicle
         {
             get 
             {
@@ -32,7 +32,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public string OwnerName
+        internal string OwnerName
         {
             get
             {
@@ -40,7 +40,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public string PhoneNumber
+        internal string PhoneNumber
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public eVehicleStatus Status
+        internal eVehicleStatus Status
         {
             get
             {

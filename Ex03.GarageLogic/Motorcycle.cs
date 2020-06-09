@@ -6,7 +6,7 @@ namespace Ex03.GarageLogic
 {
     internal class Motorcycle : Vehicle
     {
-        public enum eLicenseType
+        internal enum eLicenseType
         {
             A = 1,
             A1,
@@ -17,11 +17,9 @@ namespace Ex03.GarageLogic
         private eLicenseType? m_LicenseType;
         private int? m_EngineCapacity;
 
-        public Motorcycle(string i_LicenseNumber, Engine i_Engine) : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(2, 30))
-        {
-        }
+        internal Motorcycle(string i_LicenseNumber, Engine i_Engine) : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(2, 30)) { }
 
-        public eLicenseType LicenseType
+        internal eLicenseType LicenseType
         {
             get
             {
@@ -48,7 +46,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public int EngineCapacity
+        internal int EngineCapacity
         {
             get
             {
@@ -68,16 +66,33 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> RequiredInfoForCreation()
+        internal override List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = base.RequiredInfoForCreation();
+            List<string> requiredInfo = RequiredInfoForCreationOfVehicle();
             requiredInfo.Add("Please choose LICENSE TYPE: " + Environment.NewLine + Garage.GetEnumOptions(typeof(eLicenseType)));
             requiredInfo.Add("Please enter ENGINE CPACITY:");
 
             return requiredInfo;
         }
 
-        public override StringBuilder ShowInfo()
+        internal override void CheckInputedValues(string i_UserInput, int i_RequestNumber)
+        {
+            if(i_RequestNumber < 5)
+            {
+                CheckVehicleValuesInputted(i_UserInput, i_RequestNumber);
+            }
+            switch (i_RequestNumber)
+            {
+                case 5:
+                    LicenseType = (Motorcycle.eLicenseType)int.Parse(i_UserInput);
+                    break;
+                case 6:
+                    EngineCapacity = int.Parse(i_UserInput);
+                    break;
+            }
+        }
+
+        internal override StringBuilder ShowInfo()
         {
             StringBuilder vehicleInfo = base.ShowInfo();
             vehicleInfo.AppendLine("License type: " + Enum.GetName(typeof(eLicenseType), m_LicenseType));

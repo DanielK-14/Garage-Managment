@@ -92,23 +92,21 @@ namespace Ex03.ConsoleUI
         {
             List<string> infoRequiredForCreation;
             string licenseNumber, vehicleTypeNumber, ownerName, phoneNumber;
-            object vehicle;
 
             licenseNumber = getLicenseNumber();
             if(s_Garage.IfLicenseNumberExsitsChangeStatusInRepair(licenseNumber) != true)
             {
-                vehicleTypeNumber = getVehicleInfo();
-                vehicle = VehicleCreator.CreateVehicle(vehicleTypeNumber, licenseNumber);
-                infoRequiredForCreation = s_Garage.GetAllInformationRequiredForThisTypeOfVehicle(vehicleTypeNumber, vehicle);
-                getUserInputForCreationAndFillVehicleData(infoRequiredForCreation, vehicleTypeNumber, vehicle);
                 ownerName = getOwnerName();
                 phoneNumber = getPhoneNumber();
-                s_Garage.AddVehicleToGarage(licenseNumber, vehicle, ownerName, phoneNumber);
+                vehicleTypeNumber = getVehicleInfo();
+                s_Garage.CreateNewVehicle(vehicleTypeNumber, licenseNumber, ownerName, phoneNumber);
+                infoRequiredForCreation = s_Garage.GetAllInformationRequiredForThisTypeOfVehicle(licenseNumber);
+                getUserInputForCreationAndFillVehicleData(infoRequiredForCreation, licenseNumber);
             }
             else
             {
-                Thread.Sleep(3000);
                 Console.WriteLine("Vehicle already exists");
+                Thread.Sleep(3000);
             }
         }
 
@@ -218,7 +216,7 @@ namespace Ex03.ConsoleUI
             return userVehicleTypeInput;
         }
 
-        private static void getUserInputForCreationAndFillVehicleData(List<string> i_InfoRequired, string i_VehicleType, object i_Vehicle)
+        private static void getUserInputForCreationAndFillVehicleData(List<string> i_InfoRequired, string i_LicenseNumber)
         {
             Console.Clear();
             int requestNumber = 1;
@@ -234,7 +232,7 @@ namespace Ex03.ConsoleUI
                     {
                         Console.WriteLine(request);
                         userInput = Console.ReadLine();
-                        s_Garage.CheckInputForCreation(userInput, requestNumber, i_VehicleType, i_Vehicle);
+                        s_Garage.CheckInputForCreation(userInput, requestNumber, i_LicenseNumber);
                         requestNumber++;
                         validInput = true;
                     }

@@ -15,13 +15,13 @@ namespace Ex03.GarageLogic
         protected readonly eEngineType r_EngineType;
         protected float? m_RemainingEnergy;
 
-        public Engine(eEngineType i_EngineType, float i_MaximumEnergySourceCapacity)
+        internal Engine(eEngineType i_EngineType, float i_MaximumEnergySourceCapacity)
         {
             r_EngineType = i_EngineType;
             r_MaximumCapacity = i_MaximumEnergySourceCapacity;
         }
 
-        public float Remaining
+        internal float Remaining
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public float MaximumCapacity
+        internal float MaximumCapacity
         {
             get
             {
@@ -56,7 +56,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public eEngineType EngineType
+        internal eEngineType EngineType
         {
             get
             {
@@ -64,6 +64,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public abstract List<string> RequiredInfoForCreation();
+        internal abstract List<string> RequiredInfoForCreation();
     }
 }

@@ -13,7 +13,7 @@ namespace Ex03.GarageLogic
             m_VehicleDetailsList = new Dictionary<string, VehicleDetails>();
         }
 
-        public static string GetEnumOptions(Type i_EnumType)
+        internal static string GetEnumOptions(Type i_EnumType)
         {
             if (!typeof(Enum).IsAssignableFrom(i_EnumType))
             {
@@ -31,46 +31,15 @@ namespace Ex03.GarageLogic
             return optionsForPick;
         }
 
-        public List<string> GetAllInformationRequiredForThisTypeOfVehicle(string i_VehicleType, object i_Vehicle)
+        public List<string> GetAllInformationRequiredForThisTypeOfVehicle(string i_LicenseNumber)
         {
-            VehicleCreator.eVehicleType vehicleType = (VehicleCreator.eVehicleType)int.Parse(i_VehicleType);
             List<string> requiredInfo;
-
-            switch (vehicleType)
-            {
-                case VehicleCreator.eVehicleType.ElectricMotorcycle:
-                    ElectricMotorcycle electricMotor = i_Vehicle as ElectricMotorcycle;
-                    requiredInfo = electricMotor.RequiredInfoForCreation();
-                    break;
-
-                case VehicleCreator.eVehicleType.ElectricCar:
-                    ElectricCar electricCar = i_Vehicle as ElectricCar;
-                    requiredInfo = electricCar.RequiredInfoForCreation();
-                    break;
-
-                case VehicleCreator.eVehicleType.FuelCar:
-                    FuelCar fuelCar = i_Vehicle as FuelCar;
-                    requiredInfo = fuelCar.RequiredInfoForCreation();
-                    break;
-
-                case VehicleCreator.eVehicleType.FuelMotorcycle:
-                    FuelMotorcycle fuelMotor = i_Vehicle as FuelMotorcycle;
-                    requiredInfo = fuelMotor.RequiredInfoForCreation();
-                    break;
-
-                case VehicleCreator.eVehicleType.Truck:
-                    Truck truck = i_Vehicle as Truck;
-                    requiredInfo = truck.RequiredInfoForCreation();
-                    break;
-
-                default:
-                    throw new FormatException();
-            }
-
+            Vehicle vehicle = m_VehicleDetailsList[i_LicenseNumber].Vehicle;
+            requiredInfo = vehicle.RequiredInfoForCreation();
             return requiredInfo;
         }
 
-        public void AddVehicleToGarage(string i_LicenseNumber, object i_Vehicle, string i_OwnerName, string i_PhoneNumber)
+        private void addVehicleToGarage(string i_LicenseNumber, object i_Vehicle, string i_OwnerName, string i_PhoneNumber)
         {
             Vehicle vehicle = i_Vehicle as Vehicle;
             VehicleDetails vehicleDetails = new VehicleDetails(vehicle, i_OwnerName, i_PhoneNumber);
@@ -83,109 +52,16 @@ namespace Ex03.GarageLogic
             return statuses;
         }
 
-        public void CheckInputForCreation(string i_UserInput, int i_RequestNumber, string i_VehicleType, object i_Vehicle)
+        public void CheckInputForCreation(string i_UserInput, int i_RequestNumber, string i_LicenseNumber)
         {
-            if (i_RequestNumber < 5)
-            {
-                checkVehicleInputedValues(i_UserInput, i_RequestNumber, i_Vehicle as Vehicle);
-            }
-            else
-            {
-                VehicleCreator.eVehicleType vehicleType = (VehicleCreator.eVehicleType)int.Parse(i_VehicleType);
-                switch (vehicleType)
-                {
-                    case VehicleCreator.eVehicleType.ElectricCar:
-                        checkCarInputedValues(i_UserInput, i_RequestNumber, i_Vehicle as Car);
-                        break;
-                    case VehicleCreator.eVehicleType.ElectricMotorcycle:
-                        checkMotorcycleInputedValues(i_UserInput, i_RequestNumber, i_Vehicle as Motorcycle);
-                        break;
-                    case VehicleCreator.eVehicleType.FuelCar:
-                        checkCarInputedValues(i_UserInput, i_RequestNumber, i_Vehicle as Car);
-                        break;
-                    case VehicleCreator.eVehicleType.FuelMotorcycle:
-                        checkMotorcycleInputedValues(i_UserInput, i_RequestNumber, i_Vehicle as Motorcycle);
-                        break;
-                    case VehicleCreator.eVehicleType.Truck:
-                        checkTruckInputedValues(i_UserInput, i_RequestNumber, i_Vehicle as Truck);
-                        break;
-                    default:
-                        throw new FormatException();
-                }
-            }
+            Vehicle vehicle = m_VehicleDetailsList[i_LicenseNumber].Vehicle;
+            vehicle.CheckInputedValues(i_UserInput, i_RequestNumber);
         }
 
-        private void checkVehicleInputedValues(string i_UserInput, int i_RequestNumber, Vehicle i_Car)
+        public void CreateNewVehicle(string i_VehicleTypeNumber, string i_LicenseNumber, string i_OwnerName, string i_PhoneNumber)
         {
-            switch (i_RequestNumber)
-            {
-                case 1:
-                    i_Car.ModelName = i_UserInput;
-                    break;
-                case 2:
-                    i_Car.VehicleEngine.Remaining = float.Parse(i_UserInput);
-                    break;
-                case 3:
-                    i_Car.SetAllWheelsManufacturerName(i_UserInput);
-                    break;
-                case 4:
-                    i_Car.SetAllWheelsAirPressure(float.Parse(i_UserInput));
-                    break;
-            }
-        }
-
-        private void checkCarInputedValues(string i_UserInput, int i_RequestNumber, Car i_Car)
-        {
-            switch (i_RequestNumber)
-            {
-                case 5:
-                    i_Car.CarColor = (Car.eCarColor)int.Parse(i_UserInput);
-                break;
-
-                case 6:
-                    i_Car.DoorsAmount = (Car.eDoorsAmount)int.Parse(i_UserInput);
-                break;
-            }
-        }
-
-        private void checkMotorcycleInputedValues(string i_UserInput, int i_RequestNumber, Motorcycle i_Motor)
-        {
-            switch (i_RequestNumber)
-            {
-                case 5:
-                    i_Motor.LicenseType = (Motorcycle.eLicenseType)int.Parse(i_UserInput);
-                    break;
-
-                case 6:
-                    i_Motor.EngineCapacity = int.Parse(i_UserInput);
-                    break;
-            }
-        }
-
-        private void checkTruckInputedValues(string i_UserInput, int i_RequestNumber, Truck i_Truck)
-        {
-            switch (i_RequestNumber)
-            {
-                case 5:
-                    if(i_UserInput.ToLower() == "yes")
-                    {
-                        i_Truck.CarryingDangerousGoods = true;
-                    }
-                    else if(i_UserInput.ToLower() == "no")
-                    {
-                        i_Truck.CarryingDangerousGoods = false;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Wrong answer entered");
-                    }
-
-                    break;
-
-                case 6:
-                    i_Truck.CargoCapacity = float.Parse(i_UserInput);
-                    break;
-            }
+            Vehicle vehicle = VehicleCreator.CreateVehicle(i_VehicleTypeNumber, i_LicenseNumber);
+            addVehicleToGarage(i_LicenseNumber, vehicle, i_OwnerName, i_PhoneNumber);
         }
 
         public void CheckOwnerName(string i_OwnerName)

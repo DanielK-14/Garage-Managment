@@ -5,7 +5,7 @@ namespace Ex03.GarageLogic
 {
     internal class FuelEngine : Engine
     {
-        public enum eFuelType
+        internal enum eFuelType
         {
             Soler = 1,
             Octan95,
@@ -15,13 +15,13 @@ namespace Ex03.GarageLogic
 
         private readonly eFuelType r_FuelType;
 
-        public FuelEngine(eFuelType i_FuelType, float i_MaximumEnergySourceCapacity) 
+        internal FuelEngine(eFuelType i_FuelType, float i_MaximumEnergySourceCapacity) 
             : base(Engine.eEngineType.Fuel, i_MaximumEnergySourceCapacity)
         {
             r_FuelType = i_FuelType;
         }
 
-        public void Refuel(float i_LitersToAdd, eFuelType i_FuelType)
+        internal void Refuel(float i_LitersToAdd, eFuelType i_FuelType)
         {
             if(i_LitersToAdd + m_RemainingEnergy > r_MaximumCapacity)
             {
@@ -48,7 +48,7 @@ namespace Ex03.GarageLogic
             return result;
         }
 
-        public eFuelType FuelType
+        internal eFuelType FuelType
         {
             get
             {
@@ -56,7 +56,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> RequiredInfoForCreation()
+        internal override List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = new List<string>();
             requiredInfo.Add(string.Format("Please enter FUEL AMOUNT LEFT (MAXIMUM: {0}): ", r_MaximumCapacity));

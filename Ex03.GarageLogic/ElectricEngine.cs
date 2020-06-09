@@ -4,11 +4,11 @@ namespace Ex03.GarageLogic
 {
     internal class ElectricEngine : Engine
     {
-        public ElectricEngine(float i_MaximumEnergySourceCapacity) : base(Engine.eEngineType.Electric, i_MaximumEnergySourceCapacity) 
+        internal ElectricEngine(float i_MaximumEnergySourceCapacity) : base(Engine.eEngineType.Electric, i_MaximumEnergySourceCapacity) 
         {
         }
-        
-        public bool ReCharge(float i_HoursToAdd)
+
+        internal bool ReCharge(float i_HoursToAdd)
         {
             bool valid;
             if(i_HoursToAdd + m_RemainingEnergy > r_MaximumCapacity)
@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
             return valid;
         }
 
-        public override List<string> RequiredInfoForCreation()
+        internal override List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = new List<string>();
             requiredInfo.Add(string.Format("Please enter BATTERY ENERGY AMOUNT LEFT (MAXIMUM: {0}): ", r_MaximumCapacity));

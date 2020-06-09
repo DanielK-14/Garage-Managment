@@ -2,7 +2,7 @@
 {
     internal class FuelMotorcycle : Motorcycle
     {
-        public FuelMotorcycle(string i_LicenseNumber) : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Octan95, 7))
+        internal FuelMotorcycle(string i_LicenseNumber) : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Octan95, 7))
         {
         }
     }

@@ -11,7 +11,7 @@ namespace Ex03.GarageLogic
         protected string m_ModelName;
         protected List<Wheel> m_Wheels;
 
-        public Vehicle(string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels)
+        internal Vehicle(string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels)
         {
             r_LicenseNumber = i_LicenseNumber;
             m_ModelName = string.Empty;
@@ -19,7 +19,7 @@ namespace Ex03.GarageLogic
             m_Wheels = i_Wheels;
         }
 
-        public static List<Wheel> CreateWheelsForVehicle(int i_Amount, float i_MaxPressure)
+        internal static List<Wheel> CreateWheelsForVehicle(int i_Amount, float i_MaxPressure)
         {
             List<Wheel> wheels = new List<Wheel>(i_Amount);
             for (int i = 0; i < i_Amount; i++)
@@ -30,7 +30,7 @@ namespace Ex03.GarageLogic
             return wheels;
         }
 
-        public string ModelName
+        internal string ModelName
         {
             get
             {
@@ -50,7 +50,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public string LicenseNumber
+        internal string LicenseNumber
         {
             get
             {
@@ -58,7 +58,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public Engine VehicleEngine
+        internal Engine VehicleEngine
         {
             get
             {
@@ -66,7 +66,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public List<Wheel> Wheels
+        internal List<Wheel> Wheels
         {
             get
             {
@@ -74,7 +74,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public virtual StringBuilder ShowInfo()
+        internal virtual StringBuilder ShowInfo()
         {
             StringBuilder vehicleInfo = new StringBuilder();
             vehicleInfo.AppendLine("ModelName: " + m_ModelName);
@@ -100,7 +100,9 @@ namespace Ex03.GarageLogic
             return vehicleInfo;
         }
 
-        public virtual List<string> RequiredInfoForCreation()
+        internal abstract List<string> RequiredInfoForCreation();
+
+        internal virtual List<string> RequiredInfoForCreationOfVehicle()
         {
             List<string> engineInformation;
             if (r_Engine is ElectricEngine)
@@ -131,7 +133,28 @@ namespace Ex03.GarageLogic
             return requiredInfo;
         }
 
-        public void SetAllWheelsManufacturerName(string i_ManufacturerName)
+        internal abstract void CheckInputedValues(string i_UserInput, int i_RequestNumber);
+
+        internal void CheckVehicleValuesInputted(string i_UserInput, int i_RequestNumber)
+        {
+            switch (i_RequestNumber)
+            {
+                case 1:
+                    ModelName = i_UserInput;
+                    break;
+                case 2:
+                    VehicleEngine.Remaining = float.Parse(i_UserInput);
+                    break;
+                case 3:
+                    SetAllWheelsManufacturerName(i_UserInput);
+                    break;
+                case 4:
+                    SetAllWheelsAirPressure(float.Parse(i_UserInput));
+                    break;
+            }
+        }
+
+        internal void SetAllWheelsManufacturerName(string i_ManufacturerName)
         {
             foreach(var wheel in m_Wheels)
             {
@@ -139,7 +162,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public void SetAllWheelsAirPressure(float i_AirPressure)
+        internal void SetAllWheelsAirPressure(float i_AirPressure)
         {
             foreach (var wheel in m_Wheels)
             {
@@ -147,7 +170,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public void SetAllWheelsAirPressureToMax()
+        internal void SetAllWheelsAirPressureToMax()
         {
             foreach(var wheel in m_Wheels)
             {
@@ -155,7 +178,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public class Wheel
+        internal class Wheel
         {
             private readonly float r_MaximumAirPressure;
             private string m_ManufacturerName;
@@ -241,7 +264,7 @@ namespace Ex03.GarageLogic
                 }
             }
 
-            public virtual List<string> RequiredInfoForCreation()
+            internal virtual List<string> RequiredInfoForCreation()
             {
                 List<string> requiredInfo = new List<string>();
 

@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class VehicleCreator
+    internal class VehicleCreator
     {
         public enum eVehicleType
         {
@@ -11,10 +11,10 @@
             Truck
         }
 
-        public static object CreateVehicle(string i_VehicleType, string i_LicenseNumber)
+        public static Vehicle CreateVehicle(string i_VehicleType, string i_LicenseNumber)
         {
             eVehicleType vehicleType = (eVehicleType)int.Parse(i_VehicleType);
-            object vehicle = null;
+            Vehicle vehicle = null;
 
             switch (vehicleType)
             {

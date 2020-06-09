@@ -6,7 +6,7 @@ namespace Ex03.GarageLogic
 {
     internal class Car : Vehicle
     {
-        public enum eCarColor
+        internal enum eCarColor
         {
             Red = 1,
             White,
@@ -14,7 +14,7 @@ namespace Ex03.GarageLogic
             Silver
         }
 
-        public enum eDoorsAmount
+        internal enum eDoorsAmount
         {           
             TwoDoors = 1,
             ThreeDoors,
@@ -25,11 +25,11 @@ namespace Ex03.GarageLogic
         private eCarColor? m_CarColor;
         private eDoorsAmount? m_DoorsAmount;
 
-        public Car(string i_LicenseNumber, Engine i_Engine) : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(4, 32))
+        internal Car(string i_LicenseNumber, Engine i_Engine) : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(4, 32))
         {
         }
 
-        public eCarColor CarColor
+        internal eCarColor CarColor
         {
             get
             {
@@ -56,7 +56,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public eDoorsAmount DoorsAmount
+        internal eDoorsAmount DoorsAmount
         {
             get
             {
@@ -83,16 +83,33 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> RequiredInfoForCreation()
+        internal override List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = base.RequiredInfoForCreation();
+            List<string> requiredInfo = RequiredInfoForCreationOfVehicle();
             requiredInfo.Add("Please choose COLOR:" + Environment.NewLine + Garage.GetEnumOptions(typeof(eCarColor)));
             requiredInfo.Add("Please choose DOORS AMOUNT:" + Environment.NewLine + Garage.GetEnumOptions(typeof(eDoorsAmount)));
 
             return requiredInfo;
         }
 
-        public override StringBuilder ShowInfo()
+        internal override void CheckInputedValues(string i_UserInput, int i_RequestNumber)
+        {
+            if (i_RequestNumber < 5)
+            {
+                CheckVehicleValuesInputted(i_UserInput, i_RequestNumber);
+            }
+            switch (i_RequestNumber)
+            {
+                case 5:
+                    CarColor = (Car.eCarColor)int.Parse(i_UserInput);
+                    break;
+                case 6:
+                    DoorsAmount = (Car.eDoorsAmount)int.Parse(i_UserInput);
+                    break;
+            }
+        }
+
+        internal override StringBuilder ShowInfo()
         {
             StringBuilder vehicleInfo = base.ShowInfo();
             

@@ -2,7 +2,7 @@
 {
     internal class ElectricCar : Car
     {
-        public ElectricCar(string i_LicenseNumber) : base(i_LicenseNumber, new ElectricEngine((float)2.1))
+        internal ElectricCar(string i_LicenseNumber) : base(i_LicenseNumber, new ElectricEngine((float)2.1))
         {
         }
     }

@@ -9,11 +9,11 @@ namespace Ex03.GarageLogic
         private bool? m_CarryingDangerousGoods;
         private float? m_CargoCapacity;
 
-        public Truck(string i_LicenseNumber) : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Soler, 120), Vehicle.CreateWheelsForVehicle(16, 28))
+        internal Truck(string i_LicenseNumber) : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Soler, 120), Vehicle.CreateWheelsForVehicle(16, 28))
         {
         }
 
-        public bool CarryingDangerousGoods
+        internal bool CarryingDangerousGoods
         {
             get
             {
@@ -33,7 +33,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public float CargoCapacity
+        internal float CargoCapacity
         {
             get
             {
@@ -53,16 +53,44 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> RequiredInfoForCreation()
+        internal override List<string> RequiredInfoForCreation()
         {
-            List<string> requiredInfo = base.RequiredInfoForCreation();
+            List<string> requiredInfo = RequiredInfoForCreationOfVehicle();
             requiredInfo.Add("Is the truck CARRYING DANGEROUS GOODS?" + Environment.NewLine + "YES or NO :");
             requiredInfo.Add("Please enter truck's CARGO CPACITY:");
 
             return requiredInfo;
         }
 
-        public override StringBuilder ShowInfo()
+        internal override void CheckInputedValues(string i_UserInput, int i_RequestNumber)
+        {
+            if (i_RequestNumber < 5)
+            {
+                CheckVehicleValuesInputted(i_UserInput, i_RequestNumber);
+            }
+            switch (i_RequestNumber)
+            {
+                case 5:
+                    if (i_UserInput.ToLower() == "yes")
+                    {
+                        CarryingDangerousGoods = true;
+                    }
+                    else if (i_UserInput.ToLower() == "no")
+                    {
+                        CarryingDangerousGoods = false;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Wrong answer entered");
+                    }
+                    break;
+                case 6:
+                    CargoCapacity = float.Parse(i_UserInput);
+                    break;
+            }
+        }
+
+        internal override StringBuilder ShowInfo()
         {
             StringBuilder vehicleInfo = base.ShowInfo();
             vehicleInfo.AppendLine("Is carrying dangerous goods: " + m_CarryingDangerousGoods.ToString());
