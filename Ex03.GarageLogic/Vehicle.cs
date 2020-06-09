@@ -27,7 +27,14 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                m_ModelName = value;
+                if (value != string.Empty && value.StartsWith(" ") == false)
+                {
+                    m_ModelName = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Name entered is not valid");
+                }
             }
         }
 
@@ -66,20 +73,21 @@ namespace Ex03.GarageLogic
             if (m_Engine is FuelEngine)
             {
                 FuelEngine fuelEngine = m_Engine as FuelEngine;
-                vehicleInfo.AppendLine("Engine type: " + fuelEngine.EngineTypestring);
+                vehicleInfo.AppendLine("Engine type: " + Enum.GetName(typeof(Engine.eEngineType), fuelEngine.EngineType));
                 vehicleInfo.AppendLine("Fuel type: " + Enum.GetName(typeof(FuelEngine.eFuelType), fuelEngine.FuelType));
                 vehicleInfo.AppendLine("Remaining fuel amount: " + fuelEngine.Remaining.ToString());
                 vehicleInfo.AppendLine("Maximum fuel amount: " + fuelEngine.MaximumCapacity.ToString());
             }
             else
             {
-                vehicleInfo.AppendLine("Engine type: " + m_Engine.EngineTypestring);
+                vehicleInfo.AppendLine("Engine type: " + Enum.GetName(typeof(Engine.eEngineType), m_Engine.EngineType));
                 vehicleInfo.AppendLine("Remaining battery energy hours : " + m_Engine.Remaining.ToString());
                 vehicleInfo.AppendLine("Maximum battery energy in hours : " + m_Engine.MaximumCapacity.ToString());
             }
 
             return vehicleInfo;
         }
+
         public virtual List<string> RequiredInfoForCreation()
         {
             List<string> engineInformation;
@@ -108,26 +116,6 @@ namespace Ex03.GarageLogic
             }
 
             return requiredInfo;
-        }
-
-        public override int GetHashCode()
-        {
-            return this.m_LicenseNumber.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            bool equals = false;
-
-            if(obj != null)
-            {
-                if(obj is Vehicle)
-                {
-                    equals = this.GetHashCode() == ((Vehicle)obj).GetHashCode();
-                }
-            }
-
-            return equals;
         }
 
         public void SetAllWheelsManufacturerName(string i_ManufacturerName)
@@ -184,7 +172,14 @@ namespace Ex03.GarageLogic
                 }
                 set
                 {
-                    m_ManufacturerName = value;
+                    if (value != string.Empty && value.StartsWith(" ") == false)
+                    {
+                        m_ManufacturerName = value;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Name entered is not valid");
+                    }
                 }
             }
 

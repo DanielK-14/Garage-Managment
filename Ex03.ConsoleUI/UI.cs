@@ -10,11 +10,11 @@ namespace Ex03.ConsoleUI
         private static Garage m_Garage = new Garage();
 
         private const string k_MainMenuText =
-     @"Please choose from the following options (1-8):
+@"Please choose from the following options (1-8):
 1. Add a new vehicle to garage.
 2. Display license plate numbers for all vehicles in the garage.
-3. Modify a vehicle's status.
-4. Inflate a vehicle's wheels to maximum.
+3. Modify vehicle's status.
+4. Inflate vehicle's wheels to maximum.
 5. Refuel a gasoline-powered vehicle.
 6. Charge an electric vehicle.
 7. Display full details of a vehicle.
@@ -35,6 +35,7 @@ namespace Ex03.ConsoleUI
                 try
                 {
                     Console.WriteLine(k_MainMenuText);
+                    Console.Write("Please choose a number: ");
                     userInput = Console.ReadLine();
                     do
                     {
@@ -107,6 +108,7 @@ namespace Ex03.ConsoleUI
             }
             else
             {
+                Thread.Sleep(3000);
                 Console.WriteLine("Vehicle already exists");
             }
         }
@@ -344,15 +346,17 @@ namespace Ex03.ConsoleUI
             {
                 try
                 {
-                    Console.WriteLine("Please enter license number to refuel up to full tank: ");
+                    Console.WriteLine("Please enter license number to refuel: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+                    m_Garage.CheckLicenseNumberForRefuel(licenseNumber);
+                    Console.Clear();
 
                     Console.WriteLine("Choose fuel type to fill :" + m_Garage.GetFuelTypes());
                     fuelType = Console.ReadLine();
                     m_Garage.CheckIfFuelTypeIsValid(fuelType);
+                    Console.Clear();
 
-                    Console.WriteLine("How much fuel do you want? ");
+                    Console.WriteLine("How much fuel do you want to fill? " + m_Garage.VehiclesMaxAndCurrentSourceCapacity(licenseNumber));
                     fuelAmount = Console.ReadLine();
                     m_Garage.RefuelVehicle(licenseNumber, fuelType, fuelAmount);
 
@@ -380,11 +384,13 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine("Please enter license number to charge up battery: ");
                     licenseNumber = Console.ReadLine();
-                    m_Garage.CheckLicenseNumberInGarage(licenseNumber);
+                    m_Garage.CheckLicenseNumberForRecharge(licenseNumber);
+                    Console.Clear();
 
-                    Console.WriteLine("How much to charge the battery?  ");
+                    Console.WriteLine("How much energy do you want to fill? " + m_Garage.VehiclesMaxAndCurrentSourceCapacity(licenseNumber));
                     amountToCharge = Console.ReadLine();
                     m_Garage.ChargeVehicle(licenseNumber, amountToCharge);
+                    Console.Clear();
 
                     valid = true;
                 }

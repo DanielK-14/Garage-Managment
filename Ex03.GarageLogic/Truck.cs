@@ -10,11 +10,7 @@ namespace Ex03.GarageLogic
         private float? m_CargoCapacity;
 
         public Truck(string i_LicenseNumber)
-            : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Soler, 120), Vehicle.CreateWheelsForVehicle(16, 28))
-        {
-            m_CarryingDangerousGoods = null;
-            m_CargoCapacity = null;
-        }
+            : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Soler, 120), Vehicle.CreateWheelsForVehicle(16, 28)) { }
 
         public bool CarryingDangerousGoods
         {
@@ -62,6 +58,7 @@ namespace Ex03.GarageLogic
 
             return requiredInfo;
         }
+
         public override StringBuilder ShowInfo()
         {
             StringBuilder vehicleInfo = base.ShowInfo();

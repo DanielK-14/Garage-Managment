@@ -14,6 +14,7 @@ namespace Ex03.GarageLogic
             FuelCar,
             Truck
         }
+
         public static object CreateVehicle(string i_VehicleType, string i_LicenseNumber)
         {
             eVehicleType vehicleType = (eVehicleType)int.Parse(i_VehicleType);

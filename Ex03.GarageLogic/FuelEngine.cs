@@ -64,10 +64,5 @@ namespace Ex03.GarageLogic
 
             return requiredInfo;
         }
-
-        public void RefuelToFullTank()
-        {
-            Remaining = MaximumCapacity;
-        }
     }
 }

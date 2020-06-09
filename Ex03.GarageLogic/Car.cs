@@ -16,9 +16,8 @@ namespace Ex03.GarageLogic
         }
 
         public enum eDoorsAmount
-        {
-            NotSigned,
-            TwoDoors,
+        {           
+            TwoDoors = 1,
             ThreeDoors,
             FourDoors,
             FiveDoors
@@ -85,11 +84,12 @@ namespace Ex03.GarageLogic
         public override List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = base.RequiredInfoForCreation();
-            requiredInfo.Add("Please choose COLOR:\n" + Garage.GetEnumOptions(typeof(eCarColor)));
-            requiredInfo.Add("Please choose DOORS AMOUNT:\n" + Garage.GetEnumOptions(typeof(eDoorsAmount)));
+            requiredInfo.Add("Please choose COLOR:" + Environment.NewLine + Garage.GetEnumOptions(typeof(eCarColor)));
+            requiredInfo.Add("Please choose DOORS AMOUNT:" + Environment.NewLine + Garage.GetEnumOptions(typeof(eDoorsAmount)));
 
             return requiredInfo;
         }
+
         public override StringBuilder ShowInfo()
         {
             StringBuilder vehicleInfo = base.ShowInfo();

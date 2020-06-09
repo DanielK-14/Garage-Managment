@@ -97,62 +97,6 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public void CheckOwnerName(string i_OwnerName)
-        {
-            if (i_OwnerName == string.Empty || i_OwnerName.StartsWith(" ") == true)
-            {
-                throw new ArgumentException("Name entered is not valid");
-            }
-        }
-
-        public void CheckPhone(string i_PhoneNumber)
-        {
-            if(i_PhoneNumber == string.Empty || i_PhoneNumber.StartsWith(" ") == true)
-            {
-                throw new ArgumentException("Phone number entered is not valid");
-            }
-
-            foreach(var digit in i_PhoneNumber)
-            {
-                if(Char.IsDigit(digit) == false)
-                {
-                    throw new ArgumentException("Phone number entered is not valid");
-                }
-            }
-        }
-
-        public List<string> GetLicenseNumbersInStatus(string userInput)
-        {
-            VehicleDetails.eVehicleStatus status = (VehicleDetails.eVehicleStatus)int.Parse(userInput);
-            List<string> matchingLicenseNumbers = new List<string>();
-            foreach(var item in m_VehicleDetailsList)
-            {
-                if(item.Value.Status == status)
-                {
-                    matchingLicenseNumbers.Add(item.Key);
-                }
-            }
-
-            return matchingLicenseNumbers;
-        }
-
-        public void CheckLicenseNumberInGarage(string i_LicenseNumber)
-        {
-            CheckIfLicenseIsValid(i_LicenseNumber);
-            if(m_VehicleDetailsList.ContainsKey(i_LicenseNumber) == false)
-            {
-                throw new ArgumentException("License number not found in the garage");
-            }
-        }
-
-        public void CheckInputedStatus(string userInput)
-        {
-            if(Enum.IsDefined(typeof(VehicleDetails.eVehicleStatus), int.Parse(userInput)) == false)
-            {
-                throw new ArgumentException("Status picked not valid");
-            }
-        }
-
         private void checkVehicleInputedValues(string userInput, int requestNumber, Vehicle i_Car)
         {
             switch (requestNumber)
@@ -222,6 +166,62 @@ namespace Ex03.GarageLogic
                 case 6:
                     i_Truck.CargoCapacity = float.Parse(userInput);
                     break;
+            }
+        }
+
+        public void CheckOwnerName(string i_OwnerName)
+        {
+            if (i_OwnerName == string.Empty || i_OwnerName.StartsWith(" ") == true)
+            {
+                throw new ArgumentException("Name entered is not valid");
+            }
+        }
+
+        public void CheckPhone(string i_PhoneNumber)
+        {
+            if (i_PhoneNumber == string.Empty || i_PhoneNumber.StartsWith(" ") == true)
+            {
+                throw new ArgumentException("Phone number entered is not valid");
+            }
+
+            foreach (var digit in i_PhoneNumber)
+            {
+                if (Char.IsDigit(digit) == false)
+                {
+                    throw new ArgumentException("Phone number entered is not valid");
+                }
+            }
+        }
+
+        public List<string> GetLicenseNumbersInStatus(string userInput)
+        {
+            VehicleDetails.eVehicleStatus status = (VehicleDetails.eVehicleStatus)int.Parse(userInput);
+            List<string> matchingLicenseNumbers = new List<string>();
+            foreach (var item in m_VehicleDetailsList)
+            {
+                if (item.Value.Status == status)
+                {
+                    matchingLicenseNumbers.Add(item.Key);
+                }
+            }
+
+            return matchingLicenseNumbers;
+        }
+
+        public void CheckLicenseNumberInGarage(string i_LicenseNumber)
+        {
+            CheckIfLicenseIsValid(i_LicenseNumber);
+            if (m_VehicleDetailsList.ContainsKey(i_LicenseNumber) == false)
+            {
+                throw new ArgumentException("License number not found in the garage");
+            }
+        }
+
+        public void CheckInputedStatus(string userInput)
+        {
+            if (Enum.IsDefined(typeof(VehicleDetails.eVehicleStatus), int.Parse(userInput)) == false)
+            {
+                throw new ArgumentException("Status picked not valid");
             }
         }
 
@@ -307,9 +307,30 @@ namespace Ex03.GarageLogic
         {
             Vehicle vehicle;
             vehicle = m_VehicleDetailsList[i_LicenseNumber].Vehicle;
-            checkVehicleIsFuelType(vehicle);
             FuelEngine engine = vehicle.VehicleEngine as FuelEngine;
             engine.Refuel(float.Parse(i_Amount), (FuelEngine.eFuelType)int.Parse(i_FuelType));
+        }
+
+        public string VehiclesMaxAndCurrentSourceCapacity(string i_LicenseNumber)
+        {
+            float currentEnergyAmount, maxEnergyAmount;
+            currentEnergyAmount = m_VehicleDetailsList[i_LicenseNumber].Vehicle.VehicleEngine.Remaining;
+            maxEnergyAmount = m_VehicleDetailsList[i_LicenseNumber].Vehicle.VehicleEngine.MaximumCapacity;
+
+            string info = string.Format("| Current amount: {0} | Maximum capacity: {1} |", currentEnergyAmount, maxEnergyAmount);
+            return info;
+        }
+
+        public void CheckLicenseNumberForRefuel(string licenseNumber)
+        {
+            CheckLicenseNumberInGarage(licenseNumber);
+            checkVehicleIsFuelType(m_VehicleDetailsList[licenseNumber].Vehicle);
+        }
+
+        public void CheckLicenseNumberForRecharge(string licenseNumber)
+        {
+            CheckLicenseNumberInGarage(licenseNumber);
+            checkVehicleIsElectricType(m_VehicleDetailsList[licenseNumber].Vehicle);
         }
 
         private void checkVehicleIsFuelType(Vehicle i_Vehicle)

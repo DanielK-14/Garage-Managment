@@ -25,7 +25,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                if (m_RemainingEnergy != null)
+                if (m_RemainingEnergy.HasValue == true)
                 {
                     return m_RemainingEnergy.Value;
                 }
@@ -36,7 +36,7 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                if(value > m_MaximumCapacity)
+                if(value > m_MaximumCapacity || value < 0)
                 {
                     throw new ValueOutOfRangeException(m_MaximumCapacity, 0); 
                 }
@@ -60,21 +60,6 @@ namespace Ex03.GarageLogic
             get
             {
                 return m_EngineType;
-            }
-        }
-
-        public string EngineTypestring
-        {
-            get
-            {
-                if(m_EngineType == (eEngineType)1)
-                {
-                    return "Electric";
-                }
-                else
-                {
-                    return "Fuel";
-                }
             }
         }
 
