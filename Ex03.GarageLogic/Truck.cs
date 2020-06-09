@@ -4,13 +4,14 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Truck : Vehicle
+    internal class Truck : Vehicle
     {
         private bool? m_CarryingDangerousGoods;
         private float? m_CargoCapacity;
 
-        public Truck(string i_LicenseNumber)
-            : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Soler, 120), Vehicle.CreateWheelsForVehicle(16, 28)) { }
+        public Truck(string i_LicenseNumber) : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Soler, 120), Vehicle.CreateWheelsForVehicle(16, 28))
+        {
+        }
 
         public bool CarryingDangerousGoods
         {
@@ -25,6 +26,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 m_CarryingDangerousGoods = value;
@@ -44,6 +46,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 m_CargoCapacity = value;
@@ -53,7 +56,7 @@ namespace Ex03.GarageLogic
         public override List<string> RequiredInfoForCreation()
         {
             List<string> requiredInfo = base.RequiredInfoForCreation();
-            requiredInfo.Add("Is the truck CARRYING DANGEROUS GOODS?"+ Environment.NewLine + "YES or NO :");
+            requiredInfo.Add("Is the truck CARRYING DANGEROUS GOODS?" + Environment.NewLine + "YES or NO :");
             requiredInfo.Add("Please enter truck's CARGO CPACITY:");
 
             return requiredInfo;

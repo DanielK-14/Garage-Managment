@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Motorcycle : Vehicle
+    internal class Motorcycle : Vehicle
     {
         public enum eLicenseType
         {
@@ -17,8 +17,9 @@ namespace Ex03.GarageLogic
         private eLicenseType? m_LicenseType;
         private int? m_EngineCapacity;
 
-        public Motorcycle(string i_LicenseNumber, Engine i_Engine)
-            : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(2, 30)) { }
+        public Motorcycle(string i_LicenseNumber, Engine i_Engine) : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(2, 30))
+        {
+        }
 
         public eLicenseType LicenseType
         {
@@ -33,6 +34,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 if (Enum.IsDefined(typeof(eLicenseType), value) == false)
@@ -59,6 +61,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 m_EngineCapacity = value;
@@ -73,6 +76,7 @@ namespace Ex03.GarageLogic
 
             return requiredInfo;
         }
+
         public override StringBuilder ShowInfo()
         {
             StringBuilder vehicleInfo = base.ShowInfo();

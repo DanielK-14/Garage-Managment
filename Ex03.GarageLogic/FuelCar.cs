@@ -1,8 +1,9 @@
 ﻿namespace Ex03.GarageLogic
 {
-    class FuelCar : Car
+    internal class FuelCar : Car
     {
-        public FuelCar(string i_LicenseNumber)
-            :base (i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Octan96, 60)) {}
+        public FuelCar(string i_LicenseNumber) : base(i_LicenseNumber, new FuelEngine(FuelEngine.eFuelType.Octan96, 60)) 
+        {
+        }
     }
 }

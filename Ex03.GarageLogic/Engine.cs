@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
-    abstract class Engine
+    internal abstract class Engine
     {
         public enum eEngineType
         {
@@ -11,9 +11,9 @@ namespace Ex03.GarageLogic
             Fuel,
         }
 
+        protected readonly float r_MaximumCapacity;
         protected readonly eEngineType r_EngineType;
         protected float? m_RemainingEnergy;
-        protected readonly float r_MaximumCapacity;
 
         public Engine(eEngineType i_EngineType, float i_MaximumEnergySourceCapacity)
         {
@@ -34,6 +34,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 if(value > r_MaximumCapacity || value < 0)

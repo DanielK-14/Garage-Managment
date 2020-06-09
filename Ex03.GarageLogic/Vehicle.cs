@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    abstract class Vehicle
+    internal abstract class Vehicle
     {
-        protected string m_ModelName;
         protected readonly string r_LicenseNumber;
         protected readonly Engine r_Engine;
+        protected string m_ModelName;
         protected List<Wheel> m_Wheels;
 
         public Vehicle(string i_LicenseNumber, Engine i_Engine, List<Wheel> i_Wheels)
@@ -19,12 +19,24 @@ namespace Ex03.GarageLogic
             m_Wheels = i_Wheels;
         }
 
+        public static List<Wheel> CreateWheelsForVehicle(int i_Amount, float i_MaxPressure)
+        {
+            List<Wheel> wheels = new List<Wheel>(i_Amount);
+            for (int i = 0; i < i_Amount; i++)
+            {
+                wheels.Add(new Wheel(i_MaxPressure));
+            }
+
+            return wheels;
+        }
+
         public string ModelName
         {
             get
             {
                 return m_ModelName;
             }
+
             set
             {
                 if (value != string.Empty && value.StartsWith(" ") == false)
@@ -110,6 +122,7 @@ namespace Ex03.GarageLogic
             {
                 requiredInfo.Add(info);
             }
+
             foreach (string info in wheelsInformation)
             {
                 requiredInfo.Add(info);
@@ -142,22 +155,11 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public static List<Wheel> CreateWheelsForVehicle(int i_Amount, float i_MaxPressure)
-        {
-            List<Wheel> wheels = new List<Wheel>(i_Amount);
-            for (int i = 0; i < i_Amount; i++)
-            {
-                wheels.Add(new Wheel(i_MaxPressure));
-            }
-
-            return wheels;
-        }
-
         public class Wheel
         {
+            private readonly float r_MaximumAirPressure;
             private string m_ManufacturerName;
             private float? m_CurrentAirPressure;
-            private readonly float r_MaximumAirPressure;
 
             public Wheel(float i_MaximumAirPressure)
             {
@@ -170,6 +172,7 @@ namespace Ex03.GarageLogic
                 {
                     return m_ManufacturerName;
                 }
+
                 set
                 {
                     if (value != string.Empty && value.StartsWith(" ") == false)
@@ -196,6 +199,7 @@ namespace Ex03.GarageLogic
                         throw new FormatException("Value was not yet initialzed");
                     }
                 }
+
                 set
                 {
                     if(value > r_MaximumAirPressure || value < 0)

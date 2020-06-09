@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
-    class FuelEngine : Engine
+    internal class FuelEngine : Engine
     {
         public enum eFuelType
         {

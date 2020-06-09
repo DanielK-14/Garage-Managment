@@ -21,7 +21,7 @@ namespace Ex03.GarageLogic
             {
                 if (m_MaxValue.HasValue == true && m_MinValue.HasValue == true)
                 {
-                    return (string.Format(m_Message, MinValue, MaxValue));
+                    return string.Format(m_Message, MinValue, MaxValue);
                 }
                 else
                 {
@@ -43,6 +43,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("MaxValue was not yet initialzed");
                 }
             }
+
             set
             {
                 m_MaxValue = value;
@@ -62,6 +63,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("MinValue was not yet initialzed");
                 }
             }
+
             set
             {
                 if (value > MaxValue)

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ex03.GarageLogic
 {
-    class Car : Vehicle
+    internal class Car : Vehicle
     {
         public enum eCarColor
         {
@@ -25,8 +25,9 @@ namespace Ex03.GarageLogic
         private eCarColor? m_CarColor;
         private eDoorsAmount? m_DoorsAmount;
 
-        public Car(string i_LicenseNumber, Engine i_Engine)
-            : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(4, 32)) { }
+        public Car(string i_LicenseNumber, Engine i_Engine) : base(i_LicenseNumber, i_Engine, Vehicle.CreateWheelsForVehicle(4, 32))
+        {
+        }
 
         public eCarColor CarColor
         {
@@ -41,6 +42,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 if (Enum.IsDefined(typeof(eCarColor), value) == false)
@@ -67,6 +69,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 if (Enum.IsDefined(typeof(eDoorsAmount), value) == false)

@@ -13,6 +13,24 @@ namespace Ex03.GarageLogic
             m_VehicleDetailsList = new Dictionary<string, VehicleDetails>();
         }
 
+        public static string GetEnumOptions(Type i_EnumType)
+        {
+            if (!typeof(Enum).IsAssignableFrom(i_EnumType))
+            {
+                throw new ArgumentException("Value must be enum type");
+            }
+
+            string optionsForPick = string.Empty;
+            int optionNumber = 1;
+            foreach (var type in Enum.GetNames(i_EnumType))
+            {
+                optionsForPick += "(" + optionNumber.ToString() + ")" + type + " ";
+                optionNumber++;
+            }
+
+            return optionsForPick;
+        }
+
         public List<string> GetAllInformationRequiredForThisTypeOfVehicle(string i_VehicleType, object i_Vehicle)
         {
             VehicleCreator.eVehicleType vehicleType = (VehicleCreator.eVehicleType)int.Parse(i_VehicleType);
@@ -161,6 +179,7 @@ namespace Ex03.GarageLogic
                     {
                         throw new ArgumentException("Wrong answer entered");
                     }
+
                     break;
 
                 case 6:
@@ -186,7 +205,7 @@ namespace Ex03.GarageLogic
 
             foreach (var digit in i_PhoneNumber)
             {
-                if (Char.IsDigit(digit) == false)
+                if (char.IsDigit(digit) == false)
                 {
                     throw new ArgumentException("Phone number entered is not valid");
                 }
@@ -255,6 +274,7 @@ namespace Ex03.GarageLogic
             {
                 m_VehicleDetailsList[i_LicenseNumber].Status = VehicleDetails.eVehicleStatus.InRepair;
             }
+
             return result;
         }
 
@@ -264,24 +284,6 @@ namespace Ex03.GarageLogic
             {
                 throw new FormatException("Entered license number is invalid");
             }
-        }
-
-        public static string GetEnumOptions(Type i_EnumType)
-        {
-            if (!typeof(Enum).IsAssignableFrom(i_EnumType))
-            {
-                throw new ArgumentException("Value must be enum type");
-            }
-
-            string optionsForPick = string.Empty;
-            int optionNumber = 1;
-            foreach (var type in Enum.GetNames(i_EnumType))
-            {
-                optionsForPick += "(" + optionNumber.ToString() + ")" + type + " ";
-                optionNumber++;
-            }
-
-            return optionsForPick;
         }
 
         public void ValidVehicleType(string i_UserInput)
@@ -382,7 +384,5 @@ namespace Ex03.GarageLogic
                 Environment.NewLine + GetEnumOptions(typeof(VehicleCreator.eVehicleType));
             return garageVehiclesTypesInfo;
         }
-
     }
 }
-

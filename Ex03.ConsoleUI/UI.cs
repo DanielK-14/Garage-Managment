@@ -7,8 +7,6 @@ namespace Ex03.ConsoleUI
 {
     public class UI
     {
-        private static Garage s_Garage = new Garage();
-
         private const string k_MainMenuText =
 @"Please choose from the following options (1-8):
 1. Add a new vehicle to garage.
@@ -21,7 +19,9 @@ namespace Ex03.ConsoleUI
 8. Quit.
 ";
 
-        static bool s_ExitProgram = false;
+        private static Garage s_Garage = new Garage();
+
+        public static bool s_ExitProgram = false;
 
         public static void Start()
         {
@@ -39,7 +39,7 @@ namespace Ex03.ConsoleUI
                     userInput = Console.ReadLine();
                     do
                     {
-                        valid = Int32.TryParse(userInput, out userMenuSelection);
+                        valid = int.TryParse(userInput, out userMenuSelection);
                     }
                     while (valid == false);
                     userSelectionOnManu(userMenuSelection);
@@ -86,7 +86,6 @@ namespace Ex03.ConsoleUI
                 default:
                     throw new ValueOutOfRangeException(8, 1);
             }
-
         }
 
         private static void addNewVehicleToGarage()
@@ -238,7 +237,6 @@ namespace Ex03.ConsoleUI
                         s_Garage.CheckInputForCreation(userInput, requestNumber, i_VehicleType, i_Vehicle);
                         requestNumber++;
                         validInput = true;
-
                     }
                     catch(Exception ex)
                     {
@@ -246,8 +244,8 @@ namespace Ex03.ConsoleUI
                         validInput = false;
                         Console.WriteLine(ex.Message);
                     }
-
-                } while (validInput == false);
+                } 
+                while (validInput == false);
             }
         }
 

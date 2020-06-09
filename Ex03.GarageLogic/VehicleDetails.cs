@@ -2,7 +2,7 @@
 
 namespace Ex03.GarageLogic
 {
-    class VehicleDetails
+    internal class VehicleDetails
     {
         private readonly Vehicle r_Vehicle;
         private readonly string r_OwnerName;
@@ -61,6 +61,7 @@ namespace Ex03.GarageLogic
                     throw new FormatException("Value was not yet initialzed");
                 }
             }
+
             set
             {
                 if (Enum.IsDefined(typeof(eVehicleStatus), value) == true)
